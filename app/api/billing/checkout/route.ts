@@ -13,7 +13,7 @@ const bodySchema = z.object({
 });
 
 const stripe = stripeSecretKey
-  ? new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" })
+  ? new Stripe(stripeSecretKey, { apiVersion: "2022-11-15" })
   : null;
 
 const PRICE_IDS: Record<Exclude<UserPlan, "free">, string | undefined> = {

@@ -7,7 +7,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const stripe =
   stripeSecretKey && webhookSecret
-    ? new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" })
+    ? new Stripe(stripeSecretKey, { apiVersion: "2022-11-15" })
     : null;
 
 export async function POST(request: Request) {
