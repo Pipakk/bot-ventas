@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setAuth = useAuthStore((s) => s.setAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const redirectTo = searchParams.get("redirect") ?? "/dashboard";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,7 +29,7 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al iniciar sesión");
       setAuth(data.token, data.user);
-      router.push("/dashboard");
+      router.push(redirectTo);
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
@@ -68,6 +71,12 @@ export default function LoginPage() {
           ¿No tienes cuenta?{" "}
           <Link href="/register" className="text-primary-300 hover:underline">
             Regístrate
+          </Link>
+        </p>
+        <p className="mt-1 text-center text-xs text-slate-500">
+          ¿Has olvidado tu contraseña?{" "}
+          <Link href="/forgot-password" className="text-primary-300 hover:underline">
+            Recuperarla
           </Link>
         </p>
       </div>

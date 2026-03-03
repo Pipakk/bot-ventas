@@ -1,0 +1,152 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/store";
+
+const PLANS = [
+  {
+    id: "free",
+    name: "Gratis",
+    price: "0 €",
+    frequency: "1 llamada IA / semana",
+    description: "Ideal para probar el entrenador sin compromiso.",
+    features: [
+      "1 llamada IA a la semana",
+      "Acceso a todos los escenarios",
+      "Scoring básico por llamada",
+    ],
+  },
+  {
+    id: "growth",
+    name: "Crecimiento",
+    price: "40 € / mes",
+    frequency: "10 llamadas IA al día",
+    description: "Para equipos o vendedores que practican a diario.",
+    features: [
+      "Hasta 10 llamadas IA al día",
+      "Escenarios completos y notas del prospecto",
+      "Informe experto de cada llamada",
+    ],
+  },
+  {
+    id: "unlimited",
+    name: "Pro ilimitado",
+    price: "60 € / mes",
+    frequency: "Llamadas IA ilimitadas",
+    description: "Para quien entrena de forma intensiva.",
+    features: [
+      "Llamadas IA ilimitadas al día",
+      "Todos los escenarios y futuras mejoras",
+      "Informes expertos y scoring avanzado",
+    ],
+  },
+];
+
+export default function BillingPage() {
+  const { token } = useAuthStore();
+  const router = useRouter();
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [error, setError] = useState("");
+
+  if (!token) {
+    router.replace("/login");
+    return null;
+  }
+
+  async function handleSubscribe(planId: string) {
+    setError("");
+    if (planId === "free") {
+      // El plan gratuito simplemente mantiene el estado actual
+      router.push("/dashboard");
+      return;
+    }
+    try {
+      setLoadingPlan(planId);
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan: planId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "No se pudo iniciar el pago.");
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error al iniciar el pago.");
+    } finally {
+      setLoadingPlan(null);
+    }
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto space-y-8">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <Link href="/dashboard" className="text-slate-400 hover:text-white">
+          ← Volver al dashboard
+        </Link>
+        {error && <p className="text-sm text-red-400">{error}</p>}
+      </div>
+
+      <div className="text-center space-y-2">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-white">Planes y precios</h1>
+        <p className="text-slate-400 text-sm max-w-2xl mx-auto">
+          Elige el plan que mejor encaja con tu ritmo de práctica. Puedes empezar gratis y
+          actualizar más adelante.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {PLANS.map((plan) => (
+          <div
+            key={plan.id}
+            className={`card p-5 flex flex-col justify-between ${
+              plan.id === "growth"
+                ? "border-primary-500/70 bg-slate-950 shadow-[0_20px_60px_rgba(56,189,248,0.35)]"
+                : "border-slate-800/80 bg-slate-950/90"
+            }`}
+          >
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold text-white">{plan.name}</h2>
+              <p className="text-2xl font-bold text-primary-300">{plan.price}</p>
+              <p className="text-xs text-slate-400">{plan.frequency}</p>
+              <p className="text-xs text-slate-400 mt-1">{plan.description}</p>
+              <ul className="mt-3 space-y-1 text-xs text-slate-300">
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-start gap-1">
+                    <span className="mt-[2px] h-1.5 w-1.5 rounded-full bg-primary-400" />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              type="button"
+              onClick={() => handleSubscribe(plan.id)}
+              disabled={loadingPlan === plan.id}
+              className={`mt-4 w-full rounded-lg px-3 py-2 text-sm font-medium ${
+                plan.id === "growth"
+                  ? "bg-primary-500 text-slate-950 hover:bg-primary-400"
+                  : "bg-slate-800 text-slate-100 hover:bg-slate-700"
+              } disabled:opacity-60`}
+            >
+              {plan.id === "free"
+                ? "Usar plan gratuito"
+                : loadingPlan === plan.id
+                ? "Redirigiendo a Stripe..."
+                : "Elegir este plan"}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+

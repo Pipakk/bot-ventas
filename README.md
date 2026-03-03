@@ -38,29 +38,18 @@ Abre [http://localhost:3000](http://localhost:3000).
 - `npx prisma migrate dev` – Migraciones
 - `npx prisma generate` – Generar cliente Prisma
 
-## Despliegue con Docker
+## Despliegue y Stripe
 
-El Dockerfile asume build con `output: 'standalone'` en `next.config.mjs`. Añade en `next.config.mjs`:
+Para **desplegar en producción** (Vercel, Docker, VPS) y **configurar Stripe** (productos, precios, webhook), sigue la guía **[DEPLOY.md](./DEPLOY.md)**.
 
-```js
-const nextConfig = {
-  output: 'standalone',
-  // ...
-};
-```
-
-Luego:
+Resumen rápido con Docker (el proyecto ya tiene `output: 'standalone'` en `next.config.mjs`):
 
 ```bash
 docker build -t coldcall-trainer .
-docker run -p 3000:3000 -e DATABASE_URL="..." -e JWT_SECRET="..." coldcall-trainer
+docker run -p 3000:3000 -e DATABASE_URL="..." -e JWT_SECRET="..." -e STRIPE_SECRET_KEY="..." coldcall-trainer
 ```
 
-La base de datos debe estar accesible (PostgreSQL en host o servicio externo). Ejecuta migraciones antes o en un init script:
-
-```bash
-npx prisma migrate deploy
-```
+Migraciones: `npx prisma migrate deploy`.
 
 ## Estructura
 

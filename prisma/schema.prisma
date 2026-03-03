@@ -16,7 +16,9 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   passwordHash  String    @map("password_hash")
-  role          String    @default("free") // free | pro
+  role          String    @default("free") // legacy: free | pro
+  /// Plan de suscripción: free | growth | unlimited
+  plan          String    @default("free")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
@@ -85,4 +87,14 @@ model ScoreResult {
   /// Análisis experto generado por IA (texto largo estructurado)
   expertAnalysis    String?  @map("expert_analysis") @db.Text
   createdAt         DateTime @default(now()) @map("created_at")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime @default(now()) @map("created_at")
 }

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getBearerUserId } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { canUseAiMode } from "@/lib/usage-limits";
+import { canStartCall } from "@/lib/usage-limits";
 
 const bodySchema = z.object({
   industry: z.string().optional(),
@@ -22,10 +22,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const data = bodySchema.parse(body);
 
-    const allowed = await canUseAiMode(userId);
+    const { allowed, reason } = await canStartCall(userId);
     if (!allowed) {
       return NextResponse.json(
-        { error: "Modo AI solo disponible en plan Pro." },
+        { error: reason ?? "Has alcanzado el límite de llamadas para tu plan." },
         { status: 403 }
       );
     }

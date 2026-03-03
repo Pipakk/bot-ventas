@@ -8,7 +8,9 @@ import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
 
 interface Usage {
-  aiModeEnabled: boolean;
+  plan: "free" | "growth" | "unlimited";
+  remainingToday: number | null;
+  remainingThisWeek: number | null;
 }
 
 export default function DashboardPage() {
@@ -54,14 +56,33 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard
-          label="Modo AI"
-          value={usage?.aiModeEnabled ? "Activo" : "Solo Pro"}
-          helper="Usa tu propia API key de OpenAI"
+          label="Plan actual"
+          value={
+            usage?.plan === "unlimited"
+              ? "Pro · ilimitado"
+              : usage?.plan === "growth"
+              ? "Crecimiento · 10/día"
+              : "Gratuito · 1/semana"
+          }
+          helper="Gestiona tu suscripción en la página de planes."
+          href="/billing"
         />
         <StatCard
-          label="Plan"
-          value={user?.role === "pro" ? "Pro" : "Gratuito"}
-          helper={user?.role === "pro" ? "Incluye modo AI" : "Actualiza para desbloquear modo AI"}
+          label="Llamadas AI disponibles"
+          value={
+            usage?.plan === "unlimited"
+              ? "Ilimitadas hoy"
+              : usage?.plan === "growth"
+              ? `${usage?.remainingToday ?? 0} hoy`
+              : `${usage?.remainingThisWeek ?? 0} esta semana`
+          }
+          helper={
+            usage?.plan === "unlimited"
+              ? "Sin límite diario."
+              : usage?.plan === "growth"
+              ? "Hasta 10 llamadas AI al día."
+              : "Plan gratuito: 1 llamada AI/semana."
+          }
         />
       </div>
 

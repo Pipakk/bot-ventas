@@ -1,10 +1,48 @@
 "use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 import { Avatar } from "@/components/Avatar";
 
+type PaidPlanId = "growth" | "unlimited";
+
 export default function HomePage() {
   const token = useAuthStore((s) => s.token);
+  const router = useRouter();
+  const [loadingPlan, setLoadingPlan] = useState<PaidPlanId | null>(null);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  async function handlePaidPlan(planId: PaidPlanId) {
+    setCheckoutError("");
+    if (!token) {
+      router.push(`/login?redirect=${encodeURIComponent("/billing?plan=" + planId)}`);
+      return;
+    }
+    try {
+      setLoadingPlan(planId);
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan: planId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "No se pudo iniciar el pago.");
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (e) {
+      setCheckoutError(e instanceof Error ? e.message : "Error al iniciar el pago.");
+    } finally {
+      setLoadingPlan(null);
+    }
+  }
 
   return (
     <div className="space-y-12 pb-10">
@@ -125,6 +163,75 @@ export default function HomePage() {
             Ve tu puntuación, ratio hablar/escuchar, calidad de preguntas y obtén sugerencias claras
             para la siguiente ronda.
           </p>
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section className="card p-6 sm:p-8 space-y-6">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div>
+            <h2 className="text-lg sm:text-xl font-semibold text-white">Planes pensados para practicar de verdad</h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Empieza gratis con 1 llamada IA a la semana y escala cuando tu ritmo de entrenamiento lo pida.
+            </p>
+          </div>
+          <Link href="/billing" className="btn-secondary text-xs sm:text-sm">
+            Ver todos los planes →
+          </Link>
+        </div>
+        {checkoutError && (
+          <p className="text-sm text-red-400">{checkoutError}</p>
+        )}
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
+            <h3 className="text-sm font-semibold text-white">Gratis</h3>
+            <p className="text-2xl font-bold text-primary-300">0 €</p>
+            <p className="text-xs text-slate-400">1 llamada IA a la semana</p>
+            <ul className="mt-3 space-y-1 text-xs text-slate-300">
+              <li>· Acceso a todos los escenarios</li>
+              <li>· Scoring básico por llamada</li>
+            </ul>
+            <Link
+              href="/billing?plan=free"
+              className="mt-4 inline-flex w-full justify-center rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-800"
+            >
+              Usar plan gratuito
+            </Link>
+          </div>
+          <div className="rounded-2xl border border-primary-500/60 bg-slate-950 p-5 space-y-3 shadow-[0_20px_60px_rgba(56,189,248,0.35)]">
+            <h3 className="text-sm font-semibold text-white">Crecimiento</h3>
+            <p className="text-2xl font-bold text-primary-300">40 € / mes</p>
+            <p className="text-xs text-slate-400">Hasta 10 llamadas IA al día</p>
+            <ul className="mt-3 space-y-1 text-xs text-slate-300">
+              <li>· Escenarios completos y notas del prospecto</li>
+              <li>· Informes expertos tras cada llamada</li>
+            </ul>
+            <button
+              type="button"
+              onClick={() => handlePaidPlan("growth")}
+              disabled={loadingPlan !== null}
+              className="mt-4 w-full rounded-lg bg-primary-500 px-3 py-2 text-xs font-medium text-slate-950 hover:bg-primary-400 disabled:opacity-60"
+            >
+              {loadingPlan === "growth" ? "Redirigiendo a Stripe..." : "Elegir plan Crecimiento"}
+            </button>
+          </div>
+          <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
+            <h3 className="text-sm font-semibold text-white">Pro ilimitado</h3>
+            <p className="text-2xl font-bold text-primary-300">60 € / mes</p>
+            <p className="text-xs text-slate-400">Llamadas IA ilimitadas</p>
+            <ul className="mt-3 space-y-1 text-xs text-slate-300">
+              <li>· Entrenamiento intensivo sin límites</li>
+              <li>· Todas las mejoras futuras incluidas</li>
+            </ul>
+            <button
+              type="button"
+              onClick={() => handlePaidPlan("unlimited")}
+              disabled={loadingPlan !== null}
+              className="mt-4 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-800 disabled:opacity-60"
+            >
+              {loadingPlan === "unlimited" ? "Redirigiendo a Stripe..." : "Elegir plan Pro ilimitado"}
+            </button>
+          </div>
         </div>
       </section>
     </div>
