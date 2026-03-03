@@ -127,44 +127,60 @@ export default function CallPage() {
             })()}
           </div>
 
-          <>
-              <div>
-                <label className="block text-sm text-slate-400 mb-1">Proveedor de IA</label>
-                <select
-                  value={config.aiProvider}
-                  onChange={(e) => config.setConfig({ aiProvider: e.target.value as "openai" | "groq" | "ollama" })}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
+          <div>
+            <label className="block text-sm text-slate-400 mb-1">Proveedor de IA</label>
+            <select
+              value={config.aiProvider}
+              onChange={(e) => config.setConfig({ aiProvider: e.target.value as "openai" | "groq" | "ollama" })}
+              className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
+            >
+              <option value="groq">Groq (gratis, con registro)</option>
+              <option value="ollama">Ollama (gratis, local)</option>
+              <option value="openai">OpenAI (de pago)</option>
+            </select>
+            {config.aiProvider === "groq" && (
+              <p className="text-xs text-emerald-400/90 mt-1">
+                Regístrate en{" "}
+                <a
+                  href="https://console.groq.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
                 >
-                  <option value="groq">Groq (gratis, con registro)</option>
-                  <option value="ollama">Ollama (gratis, local)</option>
-                  <option value="openai">OpenAI (de pago)</option>
-                </select>
-                {config.aiProvider === "groq" && (
-                  <p className="text-xs text-emerald-400/90 mt-1">
-                    Regístrate en <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer" className="underline">console.groq.com</a> y crea una API key. Sin coste.
-                  </p>
-                )}
-                {config.aiProvider === "ollama" && (
-                  <p className="text-xs text-slate-400 mt-1">
-                    Instala <a href="https://ollama.com" target="_blank" rel="noopener noreferrer" className="underline">Ollama</a> y ejecuta: <code className="bg-slate-800 px-1 rounded">ollama run llama3.2</code>
-                  </p>
-                )}
-              </div>
-              {(config.aiProvider === "openai" || config.aiProvider === "groq") && (
-                <div>
-                  <label className="block text-sm text-slate-400 mb-1">
-                    API Key {config.aiProvider === "groq" ? "Groq" : "OpenAI"}
-                  </label>
-                  <input
-                    type="password"
-                    value={config.aiApiKey}
-                    onChange={(e) => config.setConfig({ aiApiKey: e.target.value })}
-                    placeholder={config.aiProvider === "groq" ? "gsk_..." : "sk-..."}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500"
-                  />
-                </div>
-              )}
-            </>
+                  console.groq.com
+                </a>{" "}
+                y crea una API key. Sin coste.
+              </p>
+            )}
+            {config.aiProvider === "ollama" && (
+              <p className="text-xs text-slate-400 mt-1">
+                Instala{" "}
+                <a
+                  href="https://ollama.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Ollama
+                </a>{" "}
+                y ejecuta:{" "}
+                <code className="bg-slate-800 px-1 rounded">ollama run llama3.2</code>
+              </p>
+            )}
+          </div>
+          {(config.aiProvider === "openai" || config.aiProvider === "groq") && (
+            <div>
+              <label className="block text-sm text-slate-400 mb-1">
+                API Key {config.aiProvider === "groq" ? "Groq" : "OpenAI"}
+              </label>
+              <input
+                type="password"
+                value={config.aiApiKey}
+                onChange={(e) => config.setConfig({ aiApiKey: e.target.value })}
+                placeholder={config.aiProvider === "groq" ? "gsk_..." : "sk-..."}
+                className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500"
+              />
+            </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

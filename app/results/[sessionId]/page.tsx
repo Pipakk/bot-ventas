@@ -173,7 +173,7 @@ export default function ResultPage() {
             <h3 className="text-sm font-semibold text-slate-300 mb-2">Respuestas débiles (revisar)</h3>
             <ul className="text-slate-400 text-sm space-y-1">
               {weakResponses.map((r, i) => (
-                <li key={i} className="bg-slate-800/50 rounded px-2 py-1">"{r}"</li>
+                <li key={i} className="bg-slate-800/50 rounded px-2 py-1">“{r}”</li>
               ))}
             </ul>
           </div>

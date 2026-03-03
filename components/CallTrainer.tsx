@@ -294,7 +294,9 @@ export function CallTrainer({
     abortSpeaking();
     try {
       if (recognitionRef.current) {
-        try { recognitionRef.current.abort(); } catch {}
+        try {
+          recognitionRef.current.abort();
+        } catch {}
         recognitionRef.current = null;
       }
     } catch {}
@@ -312,14 +314,11 @@ export function CallTrainer({
       },
       body: JSON.stringify({
         sessionId,
-        ai:
-          sessionConfig.mode === "ai"
-            ? {
-                provider: sessionConfig.aiProvider ?? "openai",
-                apiKey: sessionConfig.aiApiKey,
-                scenarioName: sessionConfig.scenarioId,
-              }
-            : undefined,
+        ai: {
+          provider: sessionConfig.aiProvider ?? "openai",
+          apiKey: sessionConfig.aiApiKey,
+          scenarioName: sessionConfig.scenarioId,
+        },
       }),
     });
     const data = await res.json();
@@ -330,7 +329,18 @@ export function CallTrainer({
       setError(data.error ?? "Error al colgar");
       onExit();
     }
-  }, [sessionId, token, transcript, sendTranscript, abortSpeaking, router, onExit]);
+  }, [
+    sessionId,
+    token,
+    transcript,
+    sendTranscript,
+    abortSpeaking,
+    router,
+    onExit,
+    sessionConfig.aiApiKey,
+    sessionConfig.aiProvider,
+    sessionConfig.scenarioId,
+  ]);
 
   if (resultSessionId) return null;
 
