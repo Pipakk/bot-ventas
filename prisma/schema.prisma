@@ -1,0 +1,88 @@
+// ColdCall Trainer - Schema de base de datos
+// PostgreSQL + Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Seed: npx prisma db seed
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  role          String    @default("free") // free | pro
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  callSessions  CallSession[]
+  userSettings  UserSettings?
+}
+
+model UserSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  industry        String?  @default("general")
+  defaultDifficulty String @default("normal") @map("default_difficulty") // normal | hard
+  defaultProspectType String? @map("default_prospect_type") // Business Owner | CEO | Technical Manager
+  defaultPersonality String? @map("default_personality") // Skeptical | Impatient | Polite | Hostile
+  aiProvider      String?  @map("ai_provider") // openai | etc
+  aiSystemPrompt  String?  @map("ai_system_prompt")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+}
+
+model CallSession {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mode            String   // local | ai
+  industry        String?
+  difficulty      String   // normal | hard
+  prospectType    String?  @map("prospect_type")
+  personality     String?
+  durationSeconds Int?     @map("duration_seconds")
+  startedAt      DateTime @default(now()) @map("started_at")
+  endedAt        DateTime? @map("ended_at")
+
+  transcriptEntries TranscriptEntry[]
+  scoreResult       ScoreResult?
+}
+
+model TranscriptEntry {
+  id          String   @id @default(cuid())
+  sessionId   String   @map("session_id")
+  session     CallSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker     String   // user | prospect
+  text        String   @db.Text
+  startMs     Int?     @map("start_ms")
+  endMs       Int?     @map("end_ms")
+  createdAt   DateTime @default(now()) @map("created_at")
+}
+
+model ScoreResult {
+  id                String   @id @default(cuid())
+  sessionId         String   @unique @map("session_id")
+  session           CallSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  totalScore        Int      @map("total_score") // 0-100
+  objectionHandling Int?     @map("objection_handling")
+  questionQuality   Int?     @map("question_quality")
+  conversationControl Int?   @map("conversation_control")
+  talkListenRatio   Float?   @map("talk_listen_ratio")
+  confidence        Int?
+  persistence       Int?
+  spinUsage         Int?     @map("spin_usage")
+  tonalityProxy     Int?     @map("tonality_proxy")
+  breakdownJson     String?  @map("breakdown_json") @db.Text
+  suggestionsJson   String?  @map("suggestions_json") @db.Text
+  weakResponsesJson String?  @map("weak_responses_json") @db.Text
+  /// Análisis experto generado por IA (texto largo estructurado)
+  expertAnalysis    String?  @map("expert_analysis") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at")
+}

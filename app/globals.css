@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-950 text-slate-50;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.2), transparent 55%),
+    linear-gradient(to bottom, #020617, #020617);
+  background-attachment: fixed;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-800/80 bg-slate-900/70 shadow-[0_18px_45px_rgba(15,23,42,0.8)] backdrop-blur;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-gradient-to-r from-primary-500 to-sky-400 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-500/40 transition hover:from-primary-400 hover:to-sky-300 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-full border border-slate-700/80 bg-slate-950/80 px-5 py-2.5 text-sm font-semibold text-slate-50 shadow-sm transition hover:bg-slate-900 hover:border-slate-500 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center rounded-full px-3 py-2 text-sm font-medium text-slate-300 hover:bg-slate-800/70 border border-transparent;
+}
+
+.page-container {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+.page-stack {
+  @apply flex flex-col gap-6;
+}
+
+h1,
+.text-display {
+  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-slate-50;
+}
+
+h2 {
+  @apply text-xl sm:text-2xl font-semibold tracking-tight text-slate-50;
+}
+
+h3 {
+  @apply text-lg font-semibold tracking-tight text-slate-100;
+}
+
+p {
+  @apply text-sm sm:text-base text-slate-300;
+}
+
+.text-muted {
+  @apply text-xs sm:text-sm text-slate-400;
+}
+
+.input-base {
+  @apply w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500;
+}
+
+.select-base {
+  @apply w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500;
+}
+
+.badge {
+  @apply inline-flex items-center rounded-full border border-slate-700/70 bg-slate-900/70 px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-400;
+}
+
+.badge-pill {
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.skeleton {
+  @apply animate-pulse rounded-md bg-slate-800/70;
+}
+
