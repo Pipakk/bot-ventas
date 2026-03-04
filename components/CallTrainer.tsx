@@ -39,10 +39,12 @@ export function CallTrainer({
   sessionConfig,
   token,
   onExit,
+  onLimitReached,
 }: {
   sessionConfig: SessionConfig;
   token: string;
   onExit: () => void;
+  onLimitReached?: () => void;
 }) {
   const router = useRouter();
   const [phase, setPhase] = useState<CallPhase>("ringing");
@@ -182,8 +184,12 @@ export function CallTrainer({
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Error al iniciar");
-        onExit();
+        if (res.status === 403) {
+          onLimitReached?.();
+        } else {
+          setError(data.error ?? "Error al iniciar");
+          onExit();
+        }
         return;
       }
       setSessionId(data.sessionId);

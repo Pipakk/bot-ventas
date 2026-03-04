@@ -14,12 +14,54 @@ const PROSPECT_TYPES = ["Business Owner", "CEO", "Technical Manager"];
 const PERSONALITIES = ["Skeptical", "Impatient", "Polite but resistant", "Hostile"];
 const DIFFICULTIES = ["normal", "hard"] as const;
 
+function NoCallsModal({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+      <div className="card max-w-md w-full p-6 space-y-4 border-slate-700">
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/15">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Sin llamadas disponibles</h2>
+            <p className="text-sm text-slate-400 mt-1">
+              Has alcanzado el límite de llamadas de tu plan actual. Mejora tu plan para seguir practicando.
+            </p>
+          </div>
+        </div>
+        <div className="rounded-lg bg-slate-800/60 p-3 space-y-1 text-sm text-slate-300">
+          <p>• <span className="text-primary-300 font-medium">Plan Crecimiento</span> — 10 llamadas/día por 40€/mes</p>
+          <p>• <span className="text-primary-300 font-medium">Plan Pro ilimitado</span> — sin límites por 60€/mes</p>
+        </div>
+        <div className="flex gap-3 pt-1">
+          <button
+            onClick={() => router.push("/billing")}
+            className="btn-primary flex-1"
+          >
+            Ver planes
+          </button>
+          <button
+            onClick={onClose}
+            className="btn-secondary flex-1"
+          >
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CallPage() {
   const router = useRouter();
   const token = useAuthStore((s) => s.token);
   const config = useCallConfigStore();
   const [started, setStarted] = useState(false);
   const [error, setError] = useState("");
+  const [showNoCallsModal, setShowNoCallsModal] = useState(false);
 
   useEffect(() => {
     if (!token) router.replace("/login");
@@ -43,21 +85,25 @@ export default function CallPage() {
 
   if (started) {
     return (
-      <CallTrainer
-        sessionConfig={{
-          industry: config.industry,
-          difficulty: config.difficulty,
-          prospectType: config.prospectType,
-          personality: config.personality,
-          scenarioId: config.scenarioId,
-          scenarioContext: config.scenarioId ? getScenarioById(config.scenarioId)?.aiContext ?? "" : "",
-          aiApiKey: config.aiApiKey,
-          aiProvider: config.aiProvider,
-          voiceUri: config.selectedVoiceUri || undefined,
-        }}
-        token={token}
-        onExit={() => setStarted(false)}
-      />
+      <>
+        {showNoCallsModal && <NoCallsModal onClose={() => { setShowNoCallsModal(false); setStarted(false); }} />}
+        <CallTrainer
+          sessionConfig={{
+            industry: config.industry,
+            difficulty: config.difficulty,
+            prospectType: config.prospectType,
+            personality: config.personality,
+            scenarioId: config.scenarioId,
+            scenarioContext: config.scenarioId ? getScenarioById(config.scenarioId)?.aiContext ?? "" : "",
+            aiApiKey: config.aiApiKey,
+            aiProvider: config.aiProvider,
+            voiceUri: config.selectedVoiceUri || undefined,
+          }}
+          token={token}
+          onExit={() => setStarted(false)}
+          onLimitReached={() => setShowNoCallsModal(true)}
+        />
+      </>
     );
   }
 
