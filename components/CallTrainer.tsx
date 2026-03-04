@@ -58,8 +58,7 @@ export function CallTrainer({
   const [interimTranscript, setInterimTranscript] = useState("");
 
   const messageHistoryRef = useRef<MessageHistoryItem[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<{ abort: () => void } | null>(null);
   const ringStopRef = useRef<(() => void) | null>(null);
   const callStartMsRef = useRef(0);
   const sessionIdRef = useRef<string | null>(null);
