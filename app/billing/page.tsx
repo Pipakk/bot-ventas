@@ -3,7 +3,7 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 
@@ -51,16 +51,22 @@ export default function BillingPage() {
   const router = useRouter();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [ready, setReady] = useState(false);
 
-  if (!token) {
-    router.replace("/login");
+  useEffect(() => {
+    setReady(true);
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [token, router]);
+
+  if (!ready || !token) {
     return null;
   }
 
   async function handleSubscribe(planId: string) {
     setError("");
     if (planId === "free") {
-      // El plan gratuito simplemente mantiene el estado actual
       router.push("/dashboard");
       return;
     }
@@ -151,4 +157,3 @@ export default function BillingPage() {
     </div>
   );
 }
-
