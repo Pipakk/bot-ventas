@@ -22,7 +22,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
+    <header className="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 overflow-visible">
       <div className="page-container flex h-14 items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
@@ -106,9 +106,10 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}>
+        <div className="md:hidden fixed inset-0 z-50 bg-black/70" onClick={() => setOpen(false)}>
           <div
-            className="absolute right-0 top-0 h-full w-72 bg-slate-950 border-l border-slate-800 p-5 flex flex-col gap-4 shadow-2xl"
+            className="fixed right-0 top-0 h-full w-72 bg-slate-950 border-l border-slate-800 p-5 flex flex-col gap-4 shadow-2xl"
+            style={{ backgroundColor: "#020617" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-2">
