@@ -22,7 +22,8 @@ export function Navbar() {
   };
 
   return (
-    <header className="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 overflow-visible">
+    <>
+    <header className="border-b border-slate-800/70 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
       <div className="page-container flex h-14 items-center justify-between gap-2">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2">
@@ -105,94 +106,102 @@ export function Navbar() {
         </div>
       </div>
 
-      {open && (
-        <div className="md:hidden fixed inset-0 z-50 bg-black/70" onClick={() => setOpen(false)}>
-          <div
-            className="fixed right-0 top-0 h-full w-72 bg-slate-950 border-l border-slate-800 p-5 flex flex-col gap-4 shadow-2xl"
-            style={{ backgroundColor: "#020617" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <p className="text-sm font-semibold text-slate-100">ColdCall Trainer</p>
-                <p className="text-[11px] text-slate-400">Entrena. Mejora. Cierra.</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-300 hover:text-white"
-              >
-                ✕
-              </button>
+    </header>
+
+    {open && (
+      <div className="md:hidden fixed inset-0 z-50" style={{ backgroundColor: "rgba(0,0,0,0.75)" }} onClick={() => setOpen(false)}>
+        <div
+          className="fixed right-0 top-0 h-full w-72 border-l border-slate-700 p-5 flex flex-col gap-4"
+          style={{ backgroundColor: "#0f172a" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="text-sm font-semibold text-slate-100">ColdCall Trainer</p>
+              <p className="text-[11px] text-slate-400">Entrena. Mejora. Cierra.</p>
             </div>
-            <nav className="flex flex-col gap-1 text-sm">
-              <Link
-                href="/"
-                onClick={() => setOpen(false)}
-                className={`rounded-lg px-3 py-2 ${pathname === "/" ? "bg-slate-800 text-white font-medium" : "text-slate-300 hover:bg-slate-900 hover:text-white"}`}
-              >
-                Inicio
-              </Link>
-              {token && (
-                <>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setOpen(false)}
-                    className={`rounded-lg px-3 py-2 ${isDashboard ? "bg-slate-800 text-white font-medium" : "text-slate-300 hover:bg-slate-900 hover:text-white"}`}
-                  >
-                    Mi panel
-                  </Link>
-                  <Link
-                    href="/call"
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-2 text-primary-300 hover:bg-slate-900 hover:text-primary-200 font-medium"
-                  >
-                    Entrenar ahora
-                  </Link>
-                  <Link
-                    href="/billing"
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900 hover:text-white"
-                  >
-                    Planes
-                  </Link>
-                </>
-              )}
-            </nav>
-            <div className="mt-auto flex flex-col gap-2 text-sm">
-              {token && user ? (
-                <>
-                  <p className="text-xs text-slate-500 break-all px-1">{user.email}</p>
-                  <button
-                    onClick={handleLogout}
-                    className="btn-secondary w-full justify-center h-9 text-xs"
-                  >
-                    Cerrar sesión
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    onClick={() => setOpen(false)}
-                    className="btn-secondary w-full justify-center h-9 text-xs"
-                  >
-                    Iniciar sesión
-                  </Link>
-                  <Link
-                    href="/register"
-                    onClick={() => setOpen(false)}
-                    className="btn-primary w-full justify-center h-9 text-xs"
-                  >
-                    Empezar gratis
-                  </Link>
-                </>
-              )}
-            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="h-8 w-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-white"
+              style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+            >
+              ✕
+            </button>
+          </div>
+          <nav className="flex flex-col gap-1 text-sm">
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className={`rounded-lg px-3 py-2 ${pathname === "/" ? "text-white font-medium" : "text-slate-300 hover:text-white"}`}
+              style={pathname === "/" ? { backgroundColor: "#1e293b" } : {}}
+            >
+              Inicio
+            </Link>
+            {token && (
+              <>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className={`rounded-lg px-3 py-2 ${isDashboard ? "text-white font-medium" : "text-slate-300 hover:text-white"}`}
+                  style={isDashboard ? { backgroundColor: "#1e293b" } : {}}
+                >
+                  Mi panel
+                </Link>
+                <Link
+                  href="/call"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-2 text-sky-300 font-medium hover:text-sky-200"
+                >
+                  Entrenar ahora
+                </Link>
+                <Link
+                  href="/billing"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-2 text-slate-300 hover:text-white"
+                >
+                  Planes
+                </Link>
+              </>
+            )}
+          </nav>
+          <div className="mt-auto flex flex-col gap-2 text-sm">
+            {token && user ? (
+              <>
+                <p className="text-xs text-slate-500 break-all px-1">{user.email}</p>
+                <button
+                  onClick={handleLogout}
+                  className="w-full justify-center h-9 text-xs rounded-lg text-slate-100 hover:text-white"
+                  style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="w-full text-center h-9 text-xs rounded-lg flex items-center justify-center text-slate-100 hover:text-white"
+                  style={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
+                >
+                  Iniciar sesión
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setOpen(false)}
+                  className="w-full text-center h-9 text-xs rounded-lg flex items-center justify-center font-medium text-slate-950 hover:opacity-90"
+                  style={{ backgroundColor: "#38bdf8" }}
+                >
+                  Empezar gratis
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      )}
-    </header>
+      </div>
+    )}
+    </>
   );
 }
 
