@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       data: { endedAt, durationSeconds },
     });
 
-    const segments = session.transcriptEntries.map((e) => ({
+    const segments = session.transcriptEntries.map((e: { speaker: string; text: string; startMs: number | null; endMs: number | null }) => ({
       speaker: e.speaker as "user" | "prospect",
       text: e.text,
       startMs: e.startMs ?? undefined,
