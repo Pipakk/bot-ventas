@@ -1,10 +1,13 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const search = useSearchParams();
   const router = useRouter();
   const token = search.get("token") ?? "";
@@ -98,3 +101,10 @@ export default function ResetPasswordPage() {
   );
 }
 
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="flex flex-1 items-center justify-center py-8"><div className="text-slate-400">Cargando...</div></div>}>
+      <ResetPasswordForm />
+    </Suspense>
+  );
+}

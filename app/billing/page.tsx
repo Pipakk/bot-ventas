@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -75,7 +77,7 @@ export default function BillingPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudo iniciar el pago.");
       if (data.url) {
-        window.location.href = data.url;
+        router.push(data.url);
       } else {
         router.push("/dashboard");
       }

@@ -1,29 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+
+import { Suspense } from "react";
+import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
 
-export default function BillingSuccessPage() {
+function BillingSuccessContent() {
   const search = useSearchParams();
   const router = useRouter();
   const { token } = useAuthStore();
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!token) {
       router.replace("/login");
-      return;
     }
   }, [token, router]);
 
   const sessionId = search.get("session_id");
-
-  useEffect(() => {
-    // En este MVP asumimos que Stripe ya ha configurado la suscripción correctamente.
-    // Podríamos añadir aquí una llamada a un endpoint para confirmar el plan vía webhook o recuperación de sesión.
-  }, [sessionId]);
+  void sessionId;
 
   if (!token) return null;
 
@@ -36,7 +33,6 @@ export default function BillingSuccessPage() {
           Si no ves reflejado el cambio de plan en el dashboard en unos segundos, actualiza la
           página.
         </p>
-        {error && <p className="text-sm text-red-400 mt-2">{error}</p>}
       </div>
       <div className="flex gap-3">
         <Link href="/dashboard" className="btn-primary">
@@ -50,3 +46,10 @@ export default function BillingSuccessPage() {
   );
 }
 
+export default function BillingSuccessPage() {
+  return (
+    <Suspense fallback={<div className="text-slate-400">Cargando...</div>}>
+      <BillingSuccessContent />
+    </Suspense>
+  );
+}
