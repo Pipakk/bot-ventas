@@ -22,8 +22,9 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  callSessions  CallSession[]
-  userSettings  UserSettings?
+  callSessions       CallSession[]
+  userSettings       UserSettings?
+  passwordResetTokens PasswordResetToken[]
 }
 
 model UserSettings {
