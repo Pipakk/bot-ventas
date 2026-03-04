@@ -162,7 +162,7 @@ export default function ResultPage() {
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-slate-300 mb-2">Sugerencias de mejora</h3>
             <ul className="list-disc list-inside text-slate-400 text-sm space-y-1">
-              {suggestions.map((s, i) => (
+              {suggestions.map((s: string, i: number) => (
                 <li key={i}>{s}</li>
               ))}
             </ul>
@@ -172,7 +172,7 @@ export default function ResultPage() {
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-slate-300 mb-2">Respuestas débiles (revisar)</h3>
             <ul className="text-slate-400 text-sm space-y-1">
-              {weakResponses.map((r, i) => (
+              {weakResponses.map((r: string, i: number) => (
                 <li key={i} className="bg-slate-800/50 rounded px-2 py-1">“{r}”</li>
               ))}
             </ul>
@@ -181,7 +181,7 @@ export default function ResultPage() {
         <div>
           <h3 className="text-sm font-semibold text-slate-300 mb-2">Transcripción</h3>
           <div className="max-h-60 overflow-y-auto rounded-lg border border-slate-700 bg-slate-800/50 p-3 text-sm space-y-2">
-            {transcript.map((e, i) => (
+            {transcript.map((e: { speaker: string; text: string }, i: number) => (
               <p key={i} className={e.speaker === "user" ? "text-primary-300" : "text-slate-400"}>
                 <span className="font-medium">{e.speaker === "user" ? "Tú: " : "Prospecto: "}</span>
                 {e.text}

@@ -63,12 +63,12 @@ export function calculateScore(input: ScoreInput): ScoreResult {
   const idealRatio = 0.4;
   const ratioScore = Math.max(0, 100 - Math.abs(talkListenRatio - idealRatio) * 50);
 
-  const userTexts = segments.filter((s) => s.speaker === "user").map((s) => s.text);
-  const prospectTexts = segments.filter((s) => s.speaker === "prospect").map((s) => s.text);
-  const questionCount = userTexts.filter((t) => QUESTION_WORDS.some((q) => t.toLowerCase().includes(q)) || t.includes("?")).length;
+  const userTexts = segments.filter((s: TranscriptSegment) => s.speaker === "user").map((s: TranscriptSegment) => s.text);
+  const prospectTexts = segments.filter((s: TranscriptSegment) => s.speaker === "prospect").map((s: TranscriptSegment) => s.text);
+  const questionCount = userTexts.filter((t: string) => QUESTION_WORDS.some((q: string) => t.toLowerCase().includes(q)) || t.includes("?")).length;
   const questionQuality = Math.min(100, questionCount * 12 + 30);
 
-  const spinCount = userTexts.reduce((acc, t) => acc + SPIN_WORDS.filter((w) => t.toLowerCase().includes(w)).length, 0);
+  const spinCount = userTexts.reduce((acc: number, t: string) => acc + SPIN_WORDS.filter((w: string) => t.toLowerCase().includes(w)).length, 0);
   const spinUsage = Math.min(100, spinCount * 15 + 20);
 
   const objectionCount = prospectTexts.length;
@@ -78,7 +78,7 @@ export function calculateScore(input: ScoreInput): ScoreResult {
   const confidence = Math.min(100, userTexts.length * 6 + 40);
   const persistence = Math.min(100, userTexts.length * 4 + objectionCount * 5);
 
-  const avgLen = userTexts.reduce((a, t) => a + t.length, 0) / (userTexts.length || 1);
+  const avgLen = userTexts.reduce((a: number, t: string) => a + t.length, 0) / (userTexts.length || 1);
   const tonalityProxy = avgLen > 20 && avgLen < 120 ? 75 : avgLen <= 20 ? 60 : 70;
 
   const breakdown: ScoreBreakdown = {
@@ -110,7 +110,7 @@ export function calculateScore(input: ScoreInput): ScoreResult {
   if (objectionHandling < 60) suggestions.push("Practica respuestas breves a objeciones habituales (precio, tiempo, competencia).");
   if (suggestions.length === 0) suggestions.push("Sigue practicando para afinar el ritmo y el cierre.");
 
-  const weakResponses = userTexts.filter((t) => t.length < 10 && t.length > 0).slice(0, 5);
+  const weakResponses = userTexts.filter((t: string) => t.length < 10 && t.length > 0).slice(0, 5);
 
   return {
     totalScore: Math.max(0, Math.min(100, totalScore)),

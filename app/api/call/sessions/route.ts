@@ -28,7 +28,7 @@ export async function GET(request: Request) {
       },
     },
   });
-  const list = sessions.map((s) => ({
+  const list = sessions.map((s: typeof sessions[number]) => ({
     id: s.id,
     mode: s.mode,
     difficulty: s.difficulty,

@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Sesión no encontrada" }, { status: 404 });
     }
     await prisma.transcriptEntry.createMany({
-      data: entries.map((e) => ({
+      data: entries.map((e: { speaker: "user" | "prospect"; text: string; startMs?: number; endMs?: number }) => ({
         sessionId,
         speaker: e.speaker,
         text: e.text,

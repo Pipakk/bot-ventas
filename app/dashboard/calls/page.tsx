@@ -96,7 +96,7 @@ export default function CallsHistoryPage() {
                 </tr>
               </thead>
               <tbody>
-                {sessions.map((s) => (
+                {sessions.map((s: CallSessionSummary) => (
                   <tr key={s.id} className="border-b border-slate-800/80 hover:bg-slate-800/30">
                     <td className="py-3 px-4 text-slate-200">{formatDate(s.startedAt)}</td>
                     <td className="py-3 px-4 text-slate-300">{s.mode === "ai" ? "AI" : "Local"}</td>

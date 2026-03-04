@@ -104,7 +104,7 @@ export default function BillingPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        {PLANS.map((plan) => (
+        {PLANS.map((plan: typeof PLANS[number]) => (
           <div
             key={plan.id}
             className={`card p-5 flex flex-col justify-between ${
@@ -119,7 +119,7 @@ export default function BillingPage() {
               <p className="text-xs text-slate-400">{plan.frequency}</p>
               <p className="text-xs text-slate-400 mt-1">{plan.description}</p>
               <ul className="mt-3 space-y-1 text-xs text-slate-300">
-                {plan.features.map((f) => (
+                {plan.features.map((f: string) => (
                   <li key={f} className="flex items-start gap-1">
                     <span className="mt-[2px] h-1.5 w-1.5 rounded-full bg-primary-400" />
                     <span>{f}</span>

@@ -59,7 +59,7 @@ export function VoiceSelector({ value, onChange, className = "" }: VoiceSelector
           className="flex-1 rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100"
           aria-label="Voz del prospecto"
         >
-          {voices.map((v) => (
+          {voices.map((v: { voiceURI: string; name: string; lang: string }) => (
             <option key={v.voiceURI} value={v.voiceURI}>
               {v.name} ({v.lang})
             </option>

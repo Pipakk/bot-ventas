@@ -43,14 +43,14 @@ export async function POST(request: Request) {
     const config = {
       apiKey: data.aiApiKey ?? "",
       provider,
-      systemPrompt: undefined,
+      systemPrompt: undefined as string | undefined,
       prospectPersonality: data.personality,
       prospectType: data.prospectType,
       industry: data.industry,
       difficulty: data.difficulty,
       scenarioContext: data.scenarioContext,
     };
-    const { reply } = await getAiReply(config, messages.map((m) => ({ role: m.role, content: m.content })));
+    const { reply } = await getAiReply(config, messages.map((m: { role: "user" | "assistant"; content: string }) => ({ role: m.role, content: m.content })));
     const delayMs = 300 + Math.floor(Math.random() * 400);
     return NextResponse.json({
       reply,

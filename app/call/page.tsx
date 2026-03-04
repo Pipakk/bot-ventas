@@ -98,7 +98,7 @@ export default function CallPage() {
               }}
               className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
             >
-              {SCENARIOS.map((s) => (
+              {SCENARIOS.map((s: import("@/lib/scenarios").Scenario) => (
                 <option key={s.id} value={s.id}>
                   {s.label}
                 </option>
@@ -202,7 +202,7 @@ export default function CallPage() {
                 onChange={(e) => config.setConfig({ difficulty: e.target.value as "normal" | "hard" })}
                 className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
               >
-                {DIFFICULTIES.map((d) => (
+                {DIFFICULTIES.map((d: "normal" | "hard") => (
                   <option key={d} value={d}>
                     {d === "normal" ? "Normal" : "Difícil"}
                   </option>
@@ -219,7 +219,7 @@ export default function CallPage() {
                 onChange={(e) => config.setConfig({ prospectType: e.target.value })}
                 className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
               >
-                {PROSPECT_TYPES.map((t) => (
+                {PROSPECT_TYPES.map((t: string) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
@@ -234,7 +234,7 @@ export default function CallPage() {
                 onChange={(e) => config.setConfig({ personality: e.target.value })}
                 className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100"
               >
-                {PERSONALITIES.map((p) => (
+                {PERSONALITIES.map((p: string) => (
                   <option key={p} value={p}>
                     {p}
                   </option>

@@ -30,7 +30,7 @@ export function TranscriptPanel({ messages, interimMessage, collapsed, onToggle 
       </div>
       {!collapsed && (
         <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2 text-sm">
-          {messages.map((m, i) => (
+          {messages.map((m: TranscriptMessage, i: number) => (
             <div
               key={i}
               className={`flex ${m.speaker === "user" ? "justify-end" : "justify-start"}`}

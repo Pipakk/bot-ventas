@@ -34,7 +34,7 @@ export async function getAiReplyOllama(config: AiEngineConfig, messages: AiMessa
   const systemContent = buildSystemPrompt(config);
   const ollamaMessages = [
     { role: "system" as const, content: systemContent },
-    ...messages.map((m) => ({ role: m.role, content: m.content })),
+    ...messages.map((m: AiMessage) => ({ role: m.role, content: m.content })),
   ];
 
   const res = await fetch(`${baseUrl}/api/chat`, {

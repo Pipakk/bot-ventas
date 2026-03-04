@@ -38,7 +38,7 @@ export async function getAiReplyGroq(config: AiEngineConfig, messages: AiMessage
     model: "llama-3.1-8b-instant",
     messages: [
       { role: "system", content: systemContent },
-      ...messages.map((m) => ({ role: m.role, content: m.content })),
+      ...messages.map((m: AiMessage) => ({ role: m.role, content: m.content })),
     ],
     max_tokens: config.maxTokens ?? 150,
     temperature: 0.8,

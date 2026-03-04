@@ -33,8 +33,8 @@ export function getVoices(): Promise<SpeechSynthesisVoice[]> {
  * ordenadas: es-ES primero, luego preferencia por masculinas por nombre. Sin límite: todas las gratuitas.
  */
 export function getSpanishVoices(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice[] {
-  const allEs = voices.filter((v) => v.lang.startsWith("es"));
-  return [...allEs].sort((a, b) => {
+  const allEs = voices.filter((v: SpeechSynthesisVoice) => v.lang.startsWith("es"));
+  return [...allEs].sort((a: SpeechSynthesisVoice, b: SpeechSynthesisVoice) => {
     const aES = a.lang === "es-ES" ? 1 : 0;
     const bES = b.lang === "es-ES" ? 1 : 0;
     if (bES !== aES) return bES - aES;
@@ -64,7 +64,7 @@ export function speakAsHuman(text: string, onEnd?: () => void, voiceUri?: string
     u.rate = 0.9;
     u.pitch = 1.0;
     u.volume = 1;
-    const voice = voiceUri ? list.find((v) => v.voiceURI === voiceUri) : null;
+    const voice = voiceUri ? list.find((v: SpeechSynthesisVoice) => v.voiceURI === voiceUri) : null;
     if (voice) {
       u.voice = voice;
     } else {
