@@ -7,14 +7,14 @@ import { playRingTone } from "@/modules/audio/ring";
 import { speakAsHuman, cancelSpeech } from "@/modules/audio/speech";
 import { CallControlBar } from "@/components/CallControlBar";
 import { TranscriptPanel } from "@/components/TranscriptPanel";
-import { getScenarioById } from "@/lib/scenarios";
+import { getScenarioById, type ScenarioId } from "@/lib/scenarios";
 
 interface SessionConfig {
   industry: string;
   difficulty: "normal" | "hard";
   prospectType: string;
   personality: string;
-  scenarioId?: string;
+  scenarioId?: ScenarioId;
   scenarioContext?: string;
   aiApiKey?: string;
   aiProvider?: "openai" | "groq" | "ollama";
