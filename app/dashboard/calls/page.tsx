@@ -62,9 +62,9 @@ export default function CallsHistoryPage() {
     <div className="page-stack">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-white">Llamadas ejecutadas</h1>
+          <h1 className="text-2xl font-semibold text-white">Mis simulaciones</h1>
           <p className="text-muted mt-1">
-            Revisa el historial, la transcripción y el informe de cada práctica.
+            Cada entrenamiento guardado con su transcripción, puntuación y análisis experto.
           </p>
         </div>
         <Link href="/dashboard" className="btn-secondary w-fit">
@@ -75,10 +75,11 @@ export default function CallsHistoryPage() {
       {loading ? (
         <div className="card p-8 text-center text-slate-400">Cargando…</div>
       ) : sessions.length === 0 ? (
-        <div className="card p-8 text-center text-slate-400">
-          <p className="mb-2">Aún no hay llamadas.</p>
-          <Link href="/call" className="btn-primary">
-            Hacer una práctica
+        <div className="card p-8 text-center space-y-3">
+          <p className="text-slate-300 font-medium">Aún no has entrenado.</p>
+          <p className="text-slate-500 text-sm">Haz tu primera simulación y recibe feedback experto al instante.</p>
+          <Link href="/call" className="btn-primary inline-flex">
+            Empezar primera simulación
           </Link>
         </div>
       ) : (
@@ -88,7 +89,7 @@ export default function CallsHistoryPage() {
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-900/50">
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Fecha</th>
-                  <th className="text-left py-3 px-4 text-slate-300 font-medium">Modo</th>
+                  <th className="text-left py-3 px-4 text-slate-300 font-medium">Tipo</th>
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Dificultad</th>
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Duración</th>
                   <th className="text-left py-3 px-4 text-slate-300 font-medium">Puntuación</th>
@@ -99,7 +100,7 @@ export default function CallsHistoryPage() {
                 {sessions.map((s: CallSessionSummary) => (
                   <tr key={s.id} className="border-b border-slate-800/80 hover:bg-slate-800/30">
                     <td className="py-3 px-4 text-slate-200">{formatDate(s.startedAt)}</td>
-                    <td className="py-3 px-4 text-slate-300">{s.mode === "ai" ? "AI" : "Local"}</td>
+                    <td className="py-3 px-4 text-slate-300">{s.mode === "ai" ? "IA" : "Local"}</td>
                     <td className="py-3 px-4 text-slate-300">
                       {s.difficulty === "hard" ? "Difícil" : "Normal"}
                     </td>

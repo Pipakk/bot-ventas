@@ -37,11 +37,14 @@ export default function RegisterPage() {
 
   return (
     <div className="mx-auto max-w-sm card p-6">
-      <h2 className="text-xl font-semibold text-white mb-4">Registro</h2>
+      <div className="mb-5 space-y-1">
+        <h2 className="text-xl font-semibold text-white">Crea tu cuenta gratis</h2>
+        <p className="text-sm text-slate-400">Empieza a entrenar tus cold calls en menos de 1 minuto.</p>
+      </div>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Tu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
@@ -58,13 +61,13 @@ export default function RegisterPage() {
         />
         {error && <p className="text-sm text-red-400">{error}</p>}
         <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? "Registrando..." : "Registrarse"}
+          {loading ? "Creando cuenta..." : "Empezar a entrenar gratis"}
         </button>
       </form>
       <p className="mt-4 text-center text-sm text-slate-400">
         ¿Ya tienes cuenta?{" "}
         <Link href="/login" className="text-primary-400 hover:underline">
-          Inicia sesión
+          Iniciar sesión
         </Link>
       </p>
     </div>

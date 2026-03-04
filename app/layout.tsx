@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AppShell } from "@/components/AppShell";
 
 export const metadata = {
-  title: "ColdCall Trainer",
-  description: "Entrenador de llamadas en frío para profesionales de ventas"
+  title: "ColdCall Trainer — Entrena tus cold calls con IA",
+  description: "Practica llamadas en frío con prospectos que reaccionan como clientes reales. Mejora tu pitch, domina objeciones y cierra más reuniones."
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

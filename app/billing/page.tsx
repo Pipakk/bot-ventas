@@ -111,10 +111,9 @@ export default function BillingPage() {
       </div>
 
       <div className="text-center space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-white">Planes y precios</h1>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-white">Elige tu ritmo de entrenamiento</h1>
         <p className="text-slate-400 text-sm max-w-2xl mx-auto">
-          Elige el plan que mejor encaja con tu ritmo de práctica. Puedes empezar gratis y
-          actualizar más adelante.
+          Empieza gratis y escala cuando quieras practicar más. Sin permanencia, cancela cuando quieras.
         </p>
       </div>
 
@@ -153,10 +152,10 @@ export default function BillingPage() {
               } disabled:opacity-60`}
             >
               {plan.id === "free"
-                ? "Usar plan gratuito"
+                ? "Empezar gratis"
                 : loadingPlan === plan.id
-                ? "Redirigiendo a Stripe..."
-                : "Elegir este plan"}
+                ? "Redirigiendo..."
+                : plan.id === "growth" ? "Quiero este plan" : "Entrenamiento ilimitado"}
             </button>
           </div>
         ))}

@@ -32,7 +32,7 @@ export function Navbar() {
             <div className="hidden sm:block">
               <p className="text-sm font-semibold tracking-tight text-slate-50">ColdCall Trainer</p>
               <p className="text-[11px] text-slate-400">
-                Entrenador de llamadas en frío
+                Practica. Mejora. Cierra más.
               </p>
             </div>
           </Link>
@@ -81,10 +81,10 @@ export function Navbar() {
             ) : (
               <>
                 <Link href="/login" className="btn-ghost text-xs px-3 h-8">
-                  Entrar
+                  Iniciar sesión
                 </Link>
                 <Link href="/register" className="btn-primary text-xs px-3 h-8">
-                  Registrarse
+                  Empezar gratis
                 </Link>
               </>
             )}
@@ -106,43 +106,62 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden fixed inset-0 z-30 bg-black/50" onClick={() => setOpen(false)}>
+        <div className="md:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}>
           <div
-            className="absolute right-0 top-0 h-full w-64 bg-slate-950 border-l border-slate-800 p-4 flex flex-col gap-4"
+            className="absolute right-0 top-0 h-full w-72 bg-slate-950 border-l border-slate-800 p-5 flex flex-col gap-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-semibold text-slate-100">Menú</p>
+              <div>
+                <p className="text-sm font-semibold text-slate-100">ColdCall Trainer</p>
+                <p className="text-[11px] text-slate-400">Entrena. Mejora. Cierra.</p>
+              </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="btn-ghost h-8 w-8 flex items-center justify-center"
+                className="h-8 w-8 flex items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-300 hover:text-white"
               >
                 ✕
               </button>
             </div>
-            <nav className="flex flex-col gap-2 text-sm">
+            <nav className="flex flex-col gap-1 text-sm">
               <Link
                 href="/"
                 onClick={() => setOpen(false)}
-                className={`rounded-md px-2 py-1.5 ${pathname === "/" ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-900"}`}
+                className={`rounded-lg px-3 py-2 ${pathname === "/" ? "bg-slate-800 text-white font-medium" : "text-slate-300 hover:bg-slate-900 hover:text-white"}`}
               >
                 Inicio
               </Link>
               {token && (
-                <Link
-                  href="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className={`rounded-md px-2 py-1.5 ${isDashboard ? "bg-slate-800 text-white" : "text-slate-300 hover:bg-slate-900"}`}
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setOpen(false)}
+                    className={`rounded-lg px-3 py-2 ${isDashboard ? "bg-slate-800 text-white font-medium" : "text-slate-300 hover:bg-slate-900 hover:text-white"}`}
+                  >
+                    Mi panel
+                  </Link>
+                  <Link
+                    href="/call"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-2 text-primary-300 hover:bg-slate-900 hover:text-primary-200 font-medium"
+                  >
+                    Entrenar ahora
+                  </Link>
+                  <Link
+                    href="/billing"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900 hover:text-white"
+                  >
+                    Planes
+                  </Link>
+                </>
               )}
             </nav>
             <div className="mt-auto flex flex-col gap-2 text-sm">
               {token && user ? (
                 <>
-                  <p className="text-xs text-slate-400 break-all">{user.email}</p>
+                  <p className="text-xs text-slate-500 break-all px-1">{user.email}</p>
                   <button
                     onClick={handleLogout}
                     className="btn-secondary w-full justify-center h-9 text-xs"
@@ -155,16 +174,16 @@ export function Navbar() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="btn-ghost w-full justify-center h-9 text-xs"
+                    className="btn-secondary w-full justify-center h-9 text-xs"
                   >
-                    Entrar
+                    Iniciar sesión
                   </Link>
                   <Link
                     href="/register"
                     onClick={() => setOpen(false)}
                     className="btn-primary w-full justify-center h-9 text-xs"
                   >
-                    Registrarse
+                    Empezar gratis
                   </Link>
                 </>
               )}

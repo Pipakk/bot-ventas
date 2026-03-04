@@ -40,7 +40,7 @@ export default function DashboardPage() {
     <div className="page-stack">
       <PageHeader
         title="Tu panel de entrenamiento"
-        description={`Bienvenido, ${user?.email}. Practica llamadas, revisa tu uso diario y prepárate para tu próxima campaña.`}
+        description={`Hola, ${user?.email?.split("@")[0]}. Cada simulación te acerca más a cerrar la siguiente reunión.`}
         actions={
           <button
             onClick={() => {
@@ -59,29 +59,29 @@ export default function DashboardPage() {
           label="Plan actual"
           value={
             usage?.plan === "unlimited"
-              ? "Pro · ilimitado"
+              ? "Pro · Ilimitado"
               : usage?.plan === "growth"
               ? "Crecimiento · 10/día"
               : "Gratuito · 1/semana"
           }
-          helper="Gestiona tu suscripción en la página de planes."
+          helper="Haz clic para cambiar de plan."
           href="/billing"
         />
         <StatCard
-          label="Llamadas AI disponibles"
+          label="Simulaciones disponibles"
           value={
             usage?.plan === "unlimited"
-              ? "Ilimitadas hoy"
+              ? "Sin límite hoy"
               : usage?.plan === "growth"
-              ? `${usage?.remainingToday ?? 0} hoy`
-              : `${usage?.remainingThisWeek ?? 0} esta semana`
+              ? `${usage?.remainingToday ?? 0} restantes hoy`
+              : `${usage?.remainingThisWeek ?? 0} restantes esta semana`
           }
           helper={
             usage?.plan === "unlimited"
-              ? "Sin límite diario."
+              ? "Entrena tanto como quieras."
               : usage?.plan === "growth"
-              ? "Hasta 10 llamadas AI al día."
-              : "Plan gratuito: 1 llamada AI/semana."
+              ? "Hasta 10 simulaciones al día."
+              : "Plan gratuito: 1 simulación por semana."
           }
         />
       </div>
@@ -89,26 +89,26 @@ export default function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-white mb-1">Nueva práctica</h2>
+            <h2 className="text-lg font-semibold text-white mb-1">Entrenar ahora</h2>
             <p className="text-slate-400 text-sm max-w-xl">
-              Configura industria, dificultad y tipo de prospecto. Luego inicia una simulación de llamada
-              con voz y análisis automático.
+              Elige tu escenario, el perfil del prospecto y empieza. En menos de 2 minutos estarás
+              recibiendo objeciones reales y feedback experto.
             </p>
           </div>
           <button
             onClick={() => router.push("/call")}
             className="btn-primary"
           >
-            Iniciar llamada de práctica
+            Empezar simulación
           </button>
         </div>
         <Link
           href="/dashboard/calls"
           className="card p-6 flex flex-col justify-center gap-2 hover:border-slate-600 transition-colors"
         >
-          <h2 className="text-lg font-semibold text-white">Llamadas ejecutadas</h2>
+          <h2 className="text-lg font-semibold text-white">Mis simulaciones</h2>
           <p className="text-slate-400 text-sm">
-            Revisa el historial, la transcripción y el informe de cada llamada.
+            Revisa cada entrenamiento: transcripción completa, puntuación y análisis experto.
           </p>
           <span className="text-primary-400 text-sm font-medium">Ver historial →</span>
         </Link>

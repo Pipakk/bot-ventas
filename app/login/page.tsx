@@ -45,8 +45,8 @@ function LoginForm() {
     <div className="flex flex-1 items-center justify-center py-8">
       <div className="w-full max-w-md card p-6 sm:p-8 space-y-5">
         <div className="space-y-1 text-center">
-          <h2 className="text-2xl font-semibold text-white">Iniciar sesión</h2>
-          <p className="text-muted">Accede a tu panel de prácticas.</p>
+          <h2 className="text-2xl font-semibold text-white">Bienvenido de nuevo</h2>
+          <p className="text-muted">Accede y sigue entrenando donde lo dejaste.</p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
@@ -67,13 +67,13 @@ function LoginForm() {
           />
           {error && <p className="text-sm text-red-400">{error}</p>}
           <button type="submit" className="btn-primary w-full mt-1" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? "Entrando..." : "Iniciar sesión"}
           </button>
         </form>
         <p className="mt-2 text-center text-sm text-slate-400">
           ¿No tienes cuenta?{" "}
           <Link href="/register" className="text-primary-300 hover:underline">
-            Regístrate
+            Empieza gratis
           </Link>
         </p>
         <p className="mt-1 text-center text-xs text-slate-500">

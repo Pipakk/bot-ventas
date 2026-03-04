@@ -118,14 +118,14 @@ export default function CallPage() {
       <div className="grid gap-6 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-start">
         <div className="card p-6 space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold text-white">Configuración de la llamada</h2>
+            <h2 className="text-lg font-semibold text-white">Prepara tu entrenamiento</h2>
             <span className="rounded-full bg-slate-800/80 px-3 py-1 text-[10px] uppercase tracking-[0.15em] text-slate-400">
-              Simulación de avatar
+              Simulación con IA
             </span>
           </div>
 
           <div>
-            <label className="block text-sm text-slate-400 mb-1">Escenario de práctica</label>
+            <label className="block text-sm text-slate-400 mb-1">Escenario de venta</label>
             <select
               value={config.scenarioId}
               onChange={(e) => {
@@ -161,7 +161,7 @@ export default function CallPage() {
                   {scenario.prepNotes && (
                     <div className="mt-2 rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-[11px] text-slate-200 space-y-1">
                       <span className="block text-[10px] uppercase tracking-[0.18em] text-slate-500">
-                        Notas previas del prospecto
+                        Contexto del prospecto
                       </span>
                       <p className="text-slate-300">
                         {scenario.prepNotes}
@@ -174,7 +174,7 @@ export default function CallPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-400 mb-1">Proveedor de IA</label>
+            <label className="block text-sm text-slate-400 mb-1">Motor de IA</label>
             <select
               value={config.aiProvider}
               onChange={(e) => config.setConfig({ aiProvider: e.target.value as "openai" | "groq" | "ollama" })}
@@ -230,13 +230,13 @@ export default function CallPage() {
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm text-slate-400 mb-1">Industria</label>
-              <input
-                type="text"
-                value={config.industry}
-                onChange={(e) => config.setConfig({ industry: e.target.value })}
-                placeholder="ej. SaaS, retail, tecnología"
+          <div>
+            <label className="block text-sm text-slate-400 mb-1">Sector / Industria</label>
+            <input
+              type="text"
+              value={config.industry}
+              onChange={(e) => config.setConfig({ industry: e.target.value })}
+              placeholder="ej. SaaS, retail, tecnología"
                 className="w-full rounded-lg border border-slate-700 bg-slate-900/80 px-3 py-2 text-slate-100 placeholder-slate-500"
               />
             </div>
@@ -290,7 +290,7 @@ export default function CallPage() {
           </div>
 
           <div>
-            <label className="block text-sm text-slate-400 mb-1">Voz del prospecto</label>
+            <label className="block text-sm text-slate-400 mb-1">Voz del prospecto (opcional)</label>
             <VoiceSelector
               value={config.selectedVoiceUri}
               onChange={(voiceUri) => config.setConfig({ selectedVoiceUri: voiceUri })}
@@ -299,13 +299,13 @@ export default function CallPage() {
 
           {error && <p className="text-sm text-red-400">{error}</p>}
           <button onClick={handleStart} className="btn-primary w-full mt-2">
-            Iniciar llamada
+            Iniciar simulación
           </button>
         </div>
 
         <div className="card p-4 flex flex-col items-center gap-4">
           <p className="text-xs uppercase tracking-[0.15em] text-slate-400">
-            Vista previa del prospecto
+            Tu prospecto
           </p>
           <Avatar
             isSpeaking={false}
@@ -325,7 +325,7 @@ export default function CallPage() {
               </span>
             </div>
             <p className="text-slate-400">
-              Personalidad {config.personality.toLowerCase()} en sector {config.industry || "general"}.
+              {config.personality} · sector {config.industry || "general"}
             </p>
           </div>
         </div>

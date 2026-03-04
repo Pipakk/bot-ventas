@@ -55,27 +55,26 @@ export default function HomePage() {
           <div className="space-y-6">
             <p className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-300 ring-1 ring-slate-700/70">
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Entrenador de llamadas en frío para ventas B2B
+              Para SDR, BDR y equipos de ventas B2B
             </p>
             <div className="space-y-3">
               <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-white">
-                Convierte tus{" "}
+                Entrena tus cold calls{" "}
                 <span className="bg-gradient-to-r from-sky-300 to-primary-400 bg-clip-text text-transparent">
-                  cold calls
-                </span>{" "}
-                en ensayos perfectos.
+                  y domina cualquier objeción.
+                </span>
               </h1>
               <p className="max-w-xl text-sm sm:text-base text-slate-300">
-                Simula llamadas en español con objeciones reales, avatar por voz y scoring avanzado.
-                Practica antes de marcar a tus clientes de verdad.
+                Practica con prospectos que reaccionan como clientes reales. Mejora tu pitch,
+                gestiona objeciones y aumenta tus reuniones antes de llamar a clientes de verdad.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <Link
-                href={token ? "/dashboard" : "/register"}
+                href={token ? "/call" : "/register"}
                 className="btn-primary w-full sm:w-auto justify-center"
               >
-                {token ? "Ir al dashboard" : "Empieza a practicar gratis"}
+                {token ? "Entrenar ahora" : "Entrenar mi primera cold call"}
               </Link>
               {!token && (
                 <Link
@@ -87,11 +86,11 @@ export default function HomePage() {
               )}
             </div>
             <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
-              <span>✔ Simulación IA con tu propia API key</span>
+              <span>✔ Objeciones reales</span>
               <span className="hidden sm:inline text-slate-600">•</span>
-              <span className="hidden sm:inline">✔ Escenarios de venta reales (web, IA, fidelización)</span>
+              <span className="hidden sm:inline">✔ Perfiles CEO, dueño y técnico</span>
               <span className="hidden lg:inline text-slate-600">•</span>
-              <span className="hidden lg:inline">✔ Scoring 0–100 + informe experto</span>
+              <span className="hidden lg:inline">✔ Feedback experto post-llamada</span>
             </div>
           </div>
 
@@ -120,7 +119,7 @@ export default function HomePage() {
                     </p>
                   </div>
                   <div className="flex items-center justify-between w-full mt-1 text-[11px] text-slate-400">
-                    <span>Habla ahora para manejar la objeción.</span>
+                    <span>Responde y maneja la objeción.</span>
                     <span className="rounded-full bg-slate-900 px-2 py-0.5 font-mono text-slate-200">
                       🎙 LIVE
                     </span>
@@ -136,32 +135,32 @@ export default function HomePage() {
       <section className="grid gap-4 md:grid-cols-3">
         <div className="card p-4 space-y-2">
           <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            1 · Diseña el escenario
+            1 · Elige tu escenario
           </p>
-          <p className="text-sm font-semibold text-slate-50">Elige industria y tipo de prospecto</p>
+          <p className="text-sm font-semibold text-slate-50">Prospectos que ponen a prueba tu pitch</p>
           <p className="text-xs text-slate-400">
-            Configura sector, dificultad y personalidad (escéptico, impaciente, hostil…) en segundos
-            antes de llamar.
+            CEO escéptico, dueño impaciente, técnico hostil… Elige el perfil y la dificultad para
+            entrenar donde más te cuesta.
           </p>
         </div>
         <div className="card p-4 space-y-2">
           <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            2 · Llama con voz real
+            2 · Entrena con voz real
           </p>
-          <p className="text-sm font-semibold text-slate-50">Avatar que te responde en tiempo real</p>
+          <p className="text-sm font-semibold text-slate-50">Objeciones en tiempo real, como una llamada de verdad</p>
           <p className="text-xs text-slate-400">
-            Ring, pausas, interrupciones y cambio de tono según tus respuestas, como en una llamada
-            real.
+            El prospecto responde, interrumpe y cambia de tono según lo que dices. Sin guion fijo,
+            sin trampa.
           </p>
         </div>
         <div className="card p-4 space-y-2">
           <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            3 · Analiza y mejora
+            3 · Recibe feedback experto
           </p>
-          <p className="text-sm font-semibold text-slate-50">Scoring accionable tras cada intento</p>
+          <p className="text-sm font-semibold text-slate-50">Sabe exactamente qué mejorar antes de la próxima llamada</p>
           <p className="text-xs text-slate-400">
-            Ve tu puntuación, ratio hablar/escuchar, calidad de preguntas y obtén sugerencias claras
-            para la siguiente ronda.
+            Puntuación, errores clave, oportunidades perdidas y consejos concretos de un vendedor
+            top 5%.
           </p>
         </div>
       </section>
@@ -170,9 +169,9 @@ export default function HomePage() {
       <section className="card p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-white">Planes pensados para practicar de verdad</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-white">Empieza gratis. Escala cuando lo necesites.</h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              Empieza gratis con 1 llamada IA a la semana y escala cuando tu ritmo de entrenamiento lo pida.
+              Sin tarjeta. Sin compromiso. Practica tu primera simulación hoy.
             </p>
           </div>
           <Link href="/billing" className="btn-secondary text-xs sm:text-sm">
@@ -186,25 +185,25 @@ export default function HomePage() {
           <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
             <h3 className="text-sm font-semibold text-white">Gratis</h3>
             <p className="text-2xl font-bold text-primary-300">0 €</p>
-            <p className="text-xs text-slate-400">1 llamada IA a la semana</p>
+            <p className="text-xs text-slate-400">1 simulación por semana</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Acceso a todos los escenarios</li>
-              <li>· Scoring básico por llamada</li>
+              <li>· Todos los escenarios y perfiles</li>
+              <li>· Puntuación básica por llamada</li>
             </ul>
             <Link
               href="/billing?plan=free"
               className="mt-4 inline-flex w-full justify-center rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-800"
             >
-              Usar plan gratuito
+              Empezar gratis
             </Link>
           </div>
           <div className="rounded-2xl border border-primary-500/60 bg-slate-950 p-5 space-y-3 shadow-[0_20px_60px_rgba(56,189,248,0.35)]">
             <h3 className="text-sm font-semibold text-white">Crecimiento</h3>
             <p className="text-2xl font-bold text-primary-300">40 € / mes</p>
-            <p className="text-xs text-slate-400">Hasta 10 llamadas IA al día</p>
+            <p className="text-xs text-slate-400">Hasta 10 simulaciones al día</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Escenarios completos y notas del prospecto</li>
-              <li>· Informes expertos tras cada llamada</li>
+              <li>· Contexto completo del prospecto</li>
+              <li>· Informe experto tras cada simulación</li>
             </ul>
             <button
               type="button"
@@ -212,15 +211,15 @@ export default function HomePage() {
               disabled={loadingPlan !== null}
               className="mt-4 w-full rounded-lg bg-primary-500 px-3 py-2 text-xs font-medium text-slate-950 hover:bg-primary-400 disabled:opacity-60"
             >
-              {loadingPlan === "growth" ? "Redirigiendo a Stripe..." : "Elegir plan Crecimiento"}
+              {loadingPlan === "growth" ? "Redirigiendo..." : "Quiero este plan"}
             </button>
           </div>
           <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
             <h3 className="text-sm font-semibold text-white">Pro ilimitado</h3>
             <p className="text-2xl font-bold text-primary-300">60 € / mes</p>
-            <p className="text-xs text-slate-400">Llamadas IA ilimitadas</p>
+            <p className="text-xs text-slate-400">Simulaciones ilimitadas cada día</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Entrenamiento intensivo sin límites</li>
+              <li>· Entrena tanto como quieras</li>
               <li>· Todas las mejoras futuras incluidas</li>
             </ul>
             <button
@@ -229,7 +228,7 @@ export default function HomePage() {
               disabled={loadingPlan !== null}
               className="mt-4 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-800 disabled:opacity-60"
             >
-              {loadingPlan === "unlimited" ? "Redirigiendo a Stripe..." : "Elegir plan Pro ilimitado"}
+              {loadingPlan === "unlimited" ? "Redirigiendo..." : "Entrenamiento ilimitado"}
             </button>
           </div>
         </div>

@@ -54,8 +54,8 @@ export default function ResultPage() {
   }, [token, params.sessionId, router]);
 
   if (!token) return null;
-  if (loading) return <p className="text-slate-400">Cargando resultados...</p>;
-  if (error) return <p className="text-red-400">{error}</p>;
+  if (loading) return <p className="text-slate-400">Preparando tu análisis...</p>;
+  if (error) return <p className="text-red-400">No se pudo cargar el análisis. Inténtalo de nuevo.</p>;
   if (!session || !score) return <p className="text-slate-400">No hay datos para esta sesión.</p>;
 
   const alreadyAnalyzed = !!score.expertAnalysis;
@@ -66,15 +66,15 @@ export default function ResultPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <Link href="/dashboard" className="text-slate-400 hover:text-white">← Dashboard</Link>
-        <Link href="/dashboard/calls" className="text-slate-400 hover:text-white">Llamadas ejecutadas</Link>
+        <Link href="/dashboard" className="text-slate-400 hover:text-white">← Mi panel</Link>
+        <Link href="/dashboard/calls" className="text-slate-400 hover:text-white">Mis simulaciones</Link>
       </div>
       <div className="card p-6">
         <div className="flex items-start justify-between gap-3 mb-2">
           <div>
-            <h2 className="text-xl font-semibold text-white mb-1">Análisis de la llamada</h2>
+            <h2 className="text-xl font-semibold text-white mb-1">Resultado de tu simulación</h2>
             <p className="text-slate-400 text-sm">
-              Duración: {session.durationSeconds ?? 0}s · Dificultad: {session.difficulty}
+              {session.durationSeconds ?? 0}s · Dificultad: {session.difficulty === "hard" ? "Difícil" : "Normal"}
             </p>
           </div>
           {!alreadyAnalyzed && (
@@ -130,7 +130,7 @@ export default function ResultPage() {
               }}
               className="btn-secondary text-xs px-3 py-1.5"
             >
-              {analyzing ? "Analizando..." : "Analizar con IA"}
+              {analyzing ? "Analizando..." : "Obtener feedback experto"}
             </button>
           )}
         </div>
@@ -140,19 +140,19 @@ export default function ResultPage() {
             <span className="text-2xl font-bold text-primary-300">{score.totalScore}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-sm">
-            <div><span className="text-slate-400">Objeciones:</span> {score.objectionHandling ?? "-"}</div>
-            <div><span className="text-slate-400">Preguntas:</span> {score.questionQuality ?? "-"}</div>
-            <div><span className="text-slate-400">Control:</span> {score.conversationControl ?? "-"}</div>
+            <div><span className="text-slate-400">Manejo de objeciones:</span> {score.objectionHandling ?? "-"}</div>
+            <div><span className="text-slate-400">Calidad de preguntas:</span> {score.questionQuality ?? "-"}</div>
+            <div><span className="text-slate-400">Control de la conv.:</span> {score.conversationControl ?? "-"}</div>
             <div><span className="text-slate-400">Ratio hablar/escuchar:</span> {score.talkListenRatio ?? "-"}</div>
             <div><span className="text-slate-400">Confianza:</span> {score.confidence ?? "-"}</div>
             <div><span className="text-slate-400">Persistencia:</span> {score.persistence ?? "-"}</div>
-            <div><span className="text-slate-400">SPIN:</span> {score.spinUsage ?? "-"}</div>
+            <div><span className="text-slate-400">Técnica SPIN:</span> {score.spinUsage ?? "-"}</div>
             <div><span className="text-slate-400">Tonalidad:</span> {score.tonalityProxy ?? "-"}</div>
           </div>
         </div>
         {score.expertAnalysis && (
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-slate-300 mb-2">Análisis experto de la llamada</h3>
+            <h3 className="text-sm font-semibold text-slate-300 mb-2">Feedback experto</h3>
             <div className="rounded-lg border border-slate-700 bg-slate-800/70 p-3 text-sm text-slate-200 whitespace-pre-line">
               {score.expertAnalysis}
             </div>
@@ -160,7 +160,7 @@ export default function ResultPage() {
         )}
         {suggestions.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-slate-300 mb-2">Sugerencias de mejora</h3>
+            <h3 className="text-sm font-semibold text-slate-300 mb-2">Qué hacer diferente</h3>
             <ul className="list-disc list-inside text-slate-400 text-sm space-y-1">
               {suggestions.map((s: string, i: number) => (
                 <li key={i}>{s}</li>
@@ -170,7 +170,7 @@ export default function ResultPage() {
         )}
         {weakResponses.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-slate-300 mb-2">Respuestas débiles (revisar)</h3>
+            <h3 className="text-sm font-semibold text-slate-300 mb-2">Respuestas a reforzar</h3>
             <ul className="text-slate-400 text-sm space-y-1">
               {weakResponses.map((r: string, i: number) => (
                 <li key={i} className="bg-slate-800/50 rounded px-2 py-1">“{r}”</li>
@@ -179,7 +179,7 @@ export default function ResultPage() {
           </div>
         )}
         <div>
-          <h3 className="text-sm font-semibold text-slate-300 mb-2">Transcripción</h3>
+          <h3 className="text-sm font-semibold text-slate-300 mb-2">Transcripción completa</h3>
           <div className="max-h-60 overflow-y-auto rounded-lg border border-slate-700 bg-slate-800/50 p-3 text-sm space-y-2">
             {transcript.map((e: { speaker: string; text: string }, i: number) => (
               <p key={i} className={e.speaker === "user" ? "text-primary-300" : "text-slate-400"}>
@@ -190,7 +190,7 @@ export default function ResultPage() {
           </div>
         </div>
       </div>
-      <Link href="/call" className="btn-primary block text-center">Nueva práctica</Link>
+      <Link href="/call" className="btn-primary block text-center">Entrenar de nuevo</Link>
     </div>
   );
 }
