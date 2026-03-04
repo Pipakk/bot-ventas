@@ -58,7 +58,8 @@ export function CallTrainer({
   const [interimTranscript, setInterimTranscript] = useState("");
 
   const messageHistoryRef = useRef<MessageHistoryItem[]>([]);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
   const ringStopRef = useRef<(() => void) | null>(null);
   const callStartMsRef = useRef(0);
   const sessionIdRef = useRef<string | null>(null);
@@ -247,18 +248,29 @@ export function CallTrainer({
 
   useEffect(() => {
     if (phase !== "live" || !isListening) return;
-    const SpeechRecognition = (window as unknown as { SpeechRecognition?: new () => SpeechRecognition }).SpeechRecognition
-      || (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
+    type SpeechRecognitionCtor = new () => {
+      continuous: boolean;
+      interimResults: boolean;
+      lang: string;
+      maxAlternatives: number;
+      onresult: ((event: { results: { isFinal: boolean; [0]: { transcript: string } }[] & { length: number } }) => void) | null;
+      onend: (() => void) | null;
+      onerror: (() => void) | null;
+      start(): void;
+      abort(): void;
+    };
+    const w = window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor };
+    const SpeechRecognitionCls: SpeechRecognitionCtor | undefined = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SpeechRecognitionCls) {
       setError("Tu navegador no soporta reconocimiento de voz. Usa Chrome o Edge.");
       return;
     }
-    const rec = new SpeechRecognition();
+    const rec = new SpeechRecognitionCls();
     rec.continuous = true;
     rec.interimResults = true;
     rec.lang = "es-ES";
     rec.maxAlternatives = 1;
-    rec.onresult = (event: SpeechRecognitionEvent) => {
+    rec.onresult = (event: { results: { isFinal: boolean; [0]: { transcript: string } }[] & { length: number } }) => {
       const result = event.results[event.results.length - 1];
       const text = result[0].transcript.trim();
       if (result.isFinal) {
