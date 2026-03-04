@@ -72,6 +72,8 @@ export async function POST(request: Request) {
         userId,
         plan,
       },
+      payment_method_collection: "always",
+      payment_method_types: ["card"],
       success_url: `${appUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/billing`,
     });

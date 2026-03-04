@@ -54,11 +54,18 @@ export default function BillingPage() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setReady(true);
-    if (!token) {
+    // Esperar al siguiente tick para que Zustand hidrate desde localStorage
+    const t = setTimeout(() => {
+      setReady(true);
+    }, 50);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (ready && !token) {
       router.replace("/login");
     }
-  }, [token, router]);
+  }, [ready, token, router]);
 
   if (!ready || !token) {
     return null;
