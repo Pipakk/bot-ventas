@@ -48,6 +48,8 @@ interface SavedScenario {
 interface Props {
   onClose: () => void;
   onSaved: (scenario: SavedScenario) => void;
+  /** Si se pasa teamId, el escenario se crea como escenario de equipo */
+  teamId?: string;
 }
 
 // ─── constantes de opciones ──────────────────────────────────────────────────
@@ -534,7 +536,7 @@ const STEP_TITLES = [
   "Vista previa y guardar",
 ];
 
-export default function CreateScenarioModal({ onClose, onSaved }: Props) {
+export default function CreateScenarioModal({ onClose, onSaved, teamId }: Props) {
   const token = useAuthStore((s) => s.token);
   const [step, setStep] = useState(0);
   const [data, setData] = useState<WizardData>(EMPTY);
@@ -651,8 +653,11 @@ export default function CreateScenarioModal({ onClose, onSaved }: Props) {
     const industry =
       data.industry === "otro-custom" ? data.industryCustom : data.industry;
 
+    // Si hay teamId, guardar como escenario de equipo
+    const endpoint = teamId ? "/api/team/scenarios" : "/api/scenarios";
+
     try {
-      const res = await fetch("/api/scenarios", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -662,6 +667,7 @@ export default function CreateScenarioModal({ onClose, onSaved }: Props) {
           ...data,
           industry,
           objections: data.objections.filter((o) => o.trim() !== ""),
+          ...(teamId ? { teamId } : {}),
         }),
       });
 

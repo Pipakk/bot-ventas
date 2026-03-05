@@ -37,9 +37,17 @@ export async function POST(request: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId;
-    const plan = session.metadata?.plan as "growth" | "unlimited" | undefined;
+    const rawPlan = session.metadata?.plan;
+    // Aceptar tanto los nuevos nombres como los legacy
+    const planMap: Record<string, string> = {
+      growth: "professional",
+      unlimited: "premium",
+      professional: "professional",
+      premium: "premium",
+    };
+    const plan = rawPlan ? planMap[rawPlan] : undefined;
 
-    if (userId && (plan === "growth" || plan === "unlimited")) {
+    if (userId && plan) {
       try {
         await prisma.user.update({
           where: { id: userId },

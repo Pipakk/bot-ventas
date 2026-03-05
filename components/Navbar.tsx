@@ -84,13 +84,22 @@ export function Navbar() {
               Inicio
             </Link>
             {token && (
-              <Link
-                href="/dashboard"
-                className={`transition-colors hover:opacity-80 ${isDashboard ? "nav-link-active" : ""}`}
-                style={{ color: isDashboard ? "var(--primary)" : "var(--text-muted)" }}
-              >
-                Mi panel
-              </Link>
+              <>
+                <Link
+                  href="/dashboard"
+                  className={`transition-colors hover:opacity-80 ${isDashboard ? "nav-link-active" : ""}`}
+                  style={{ color: isDashboard ? "var(--primary)" : "var(--text-muted)" }}
+                >
+                  Mi panel
+                </Link>
+                <Link
+                  href="/dashboard/team"
+                  className={`transition-colors hover:opacity-80 ${pathname?.startsWith("/dashboard/team") ? "nav-link-active" : ""}`}
+                  style={{ color: pathname?.startsWith("/dashboard/team") ? "var(--primary)" : "var(--text-muted)" }}
+                >
+                  Mi equipo
+                </Link>
+              </>
             )}
           </nav>
 
@@ -209,6 +218,14 @@ export function Navbar() {
                     }}
                   >
                     Mi panel
+                  </Link>
+                  <Link
+                    href="/dashboard/team"
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-3 py-3 text-sm transition-colors"
+                    style={{ color: pathname?.startsWith("/dashboard/team") ? "var(--primary)" : "var(--text-muted)" }}
+                  >
+                    Mi equipo
                   </Link>
                   <Link
                     href="/call"

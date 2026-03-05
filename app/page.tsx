@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 import { Avatar } from "@/components/Avatar";
 
-type PaidPlanId = "growth" | "unlimited";
+type PaidPlanId = "professional" | "premium";
 
 // Scroll reveal hook
 function useReveal() {
@@ -196,13 +196,15 @@ export default function HomePage() {
           <p className="text-sm text-red-400">{checkoutError}</p>
         )}
         <div className="grid gap-4 md:grid-cols-3">
+          {/* Gratuito */}
           <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-white">Gratis</h3>
+            <h3 className="text-sm font-semibold text-white">Gratuito</h3>
             <p className="text-2xl font-bold text-primary-300">0 €</p>
             <p className="text-xs text-slate-400">1 simulación por semana</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Todos los escenarios y perfiles</li>
-              <li>· Puntuación básica por llamada</li>
+              <li>· 4 escenarios predefinidos</li>
+              <li>· Informe básico por llamada</li>
+              <li className="opacity-40 line-through text-slate-500">· Equipos de comerciales</li>
               <li className="opacity-40 line-through text-slate-500">· Escenarios personalizados</li>
             </ul>
             <Link
@@ -212,40 +214,49 @@ export default function HomePage() {
               Empezar gratis
             </Link>
           </div>
-          <div className="rounded-2xl border border-primary-500/60 bg-slate-950 p-5 space-y-3 shadow-[0_20px_60px_rgba(56,189,248,0.35)]">
-            <h3 className="text-sm font-semibold text-white">Crecimiento</h3>
+          {/* Profesional */}
+          <div className="relative rounded-2xl border border-primary-500/60 bg-slate-950 p-5 space-y-3 shadow-[0_20px_60px_rgba(56,189,248,0.35)]">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span className="bg-primary-500 text-slate-950 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                Más popular
+              </span>
+            </div>
+            <h3 className="text-sm font-semibold text-white pt-1">Profesional</h3>
             <p className="text-2xl font-bold text-primary-300">40 € / mes</p>
-            <p className="text-xs text-slate-400">Hasta 10 simulaciones al día</p>
+            <p className="text-xs text-slate-400">Simulaciones ilimitadas + 1 equipo de 10</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Contexto completo del prospecto</li>
-              <li>· Informe experto tras cada simulación</li>
-              <li>· Crear hasta 10 escenarios personalizados</li>
+              <li>· Simulaciones IA ilimitadas</li>
+              <li>· 1 equipo de hasta 10 comerciales</li>
+              <li>· Panel de gestor con métricas del equipo</li>
+              <li>· Escenarios personalizados del equipo</li>
             </ul>
             <button
               type="button"
-              onClick={() => handlePaidPlan("growth")}
+              onClick={() => handlePaidPlan("professional")}
               disabled={loadingPlan !== null}
               className="mt-4 w-full rounded-lg bg-primary-500 px-3 py-2 text-xs font-medium text-slate-950 hover:bg-primary-400 disabled:opacity-60"
             >
-              {loadingPlan === "growth" ? "Redirigiendo..." : "Quiero este plan"}
+              {loadingPlan === "professional" ? "Redirigiendo..." : "Quiero el plan Profesional"}
             </button>
           </div>
+          {/* Premium */}
           <div className="rounded-2xl border border-slate-800 bg-slate-950/80 p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-white">Pro ilimitado</h3>
+            <h3 className="text-sm font-semibold text-white">Premium</h3>
             <p className="text-2xl font-bold text-primary-300">60 € / mes</p>
-            <p className="text-xs text-slate-400">Simulaciones ilimitadas cada día</p>
+            <p className="text-xs text-slate-400">Equipos ilimitados, control total</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
-              <li>· Entrena tanto como quieras</li>
+              <li>· Simulaciones IA ilimitadas</li>
+              <li>· Equipos ilimitados de comerciales</li>
+              <li>· Panel de gestor multi-equipo</li>
               <li>· Escenarios personalizados ilimitados</li>
-              <li>· Todas las mejoras futuras incluidas</li>
             </ul>
             <button
               type="button"
-              onClick={() => handlePaidPlan("unlimited")}
+              onClick={() => handlePaidPlan("premium")}
               disabled={loadingPlan !== null}
               className="mt-4 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-800 disabled:opacity-60"
             >
-              {loadingPlan === "unlimited" ? "Redirigiendo..." : "Entrenamiento ilimitado"}
+              {loadingPlan === "premium" ? "Redirigiendo..." : "Quiero el plan Premium"}
             </button>
           </div>
         </div>

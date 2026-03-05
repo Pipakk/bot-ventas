@@ -5,8 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Seed: npx prisma db seed
-
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -18,7 +16,7 @@ model User {
   email         String    @unique
   passwordHash  String    @map("password_hash")
   role          String    @default("free") // legacy: free | pro
-  /// Plan de suscripción: free | growth | unlimited
+  /// Plan de suscripción: free | professional | premium
   plan          String    @default("free")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
@@ -27,6 +25,77 @@ model User {
   userSettings        UserSettings?
   passwordResetTokens PasswordResetToken[]
   customScenarios     CustomScenario[]
+  /// Membresías en equipos
+  teamMemberships     TeamMember[]
+  /// Equipos creados/administrados por este usuario
+  ownedTeams          Team[]
+}
+
+/// Un equipo de ventas. El owner es quien lo creó (manager principal).
+/// Un usuario con plan premium puede tener varios equipos.
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  ownerId     String   @map("owner_id")
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  /// Plan del equipo: professional (1 equipo, 10 asientos) | premium (ilimitado)
+  plan        String   @default("professional")
+  maxSeats    Int      @default(10) @map("max_seats")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  members         TeamMember[]
+  teamScenarios   TeamScenario[]
+
+  @@map("teams")
+}
+
+/// Miembro de un equipo. Roles: manager | member
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String   @map("team_id")
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// manager: puede ver todas las llamadas del equipo, gestionar miembros y crear escenarios
+  /// member: acceso según permisos individuales
+  teamRole  String   @default("member") @map("team_role")
+  /// Permisos individuales del miembro
+  canCreateScenarios  Boolean @default(false) @map("can_create_scenarios")
+  canViewTeamCalls    Boolean @default(false) @map("can_view_team_calls")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([teamId, userId])
+  @@map("team_members")
+}
+
+/// Escenario personalizado asociado a un equipo (visible para todos sus miembros)
+model TeamScenario {
+  id              String   @id @default(cuid())
+  teamId          String   @map("team_id")
+  team            Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  /// Usuario que lo creó (debe ser manager)
+  createdById     String   @map("created_by_id")
+  name            String
+  prospectName    String   @map("prospect_name")
+  industry        String
+  product         String
+  callGoal        String   @map("call_goal")
+  prospectType    String   @map("prospect_type")
+  personality     String
+  context         String   @db.Text
+  objections      String   @db.Text
+  constraints     String?  @db.Text
+  difficulty      String   @default("normal")
+  locale          String   @default("es-ES")
+  tone            String   @default("formal")
+  generatedPrompt String   @map("generated_prompt") @db.Text
+  prepNotes       String?  @map("prep_notes") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("team_scenarios")
 }
 
 model UserSettings {
@@ -34,10 +103,10 @@ model UserSettings {
   userId          String   @unique @map("user_id")
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   industry        String?  @default("general")
-  defaultDifficulty String @default("normal") @map("default_difficulty") // normal | hard
-  defaultProspectType String? @map("default_prospect_type") // Business Owner | CEO | Technical Manager
-  defaultPersonality String? @map("default_personality") // Skeptical | Impatient | Polite | Hostile
-  aiProvider      String?  @map("ai_provider") // openai | etc
+  defaultDifficulty String @default("normal") @map("default_difficulty")
+  defaultProspectType String? @map("default_prospect_type")
+  defaultPersonality String? @map("default_personality")
+  aiProvider      String?  @map("ai_provider")
   aiSystemPrompt  String?  @map("ai_system_prompt")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -47,9 +116,9 @@ model CallSession {
   id              String   @id @default(cuid())
   userId          String   @map("user_id")
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  mode            String   // local | ai
+  mode            String
   industry        String?
-  difficulty      String   // normal | hard
+  difficulty      String
   prospectType    String?  @map("prospect_type")
   personality     String?
   durationSeconds Int?     @map("duration_seconds")
@@ -64,7 +133,7 @@ model TranscriptEntry {
   id          String   @id @default(cuid())
   sessionId   String   @map("session_id")
   session     CallSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  speaker     String   // user | prospect
+  speaker     String
   text        String   @db.Text
   startMs     Int?     @map("start_ms")
   endMs       Int?     @map("end_ms")
@@ -75,7 +144,7 @@ model ScoreResult {
   id                String   @id @default(cuid())
   sessionId         String   @unique @map("session_id")
   session           CallSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  totalScore        Int      @map("total_score") // 0-100
+  totalScore        Int      @map("total_score")
   objectionHandling Int?     @map("objection_handling")
   questionQuality   Int?     @map("question_quality")
   conversationControl Int?   @map("conversation_control")
@@ -87,7 +156,6 @@ model ScoreResult {
   breakdownJson     String?  @map("breakdown_json") @db.Text
   suggestionsJson   String?  @map("suggestions_json") @db.Text
   weakResponsesJson String?  @map("weak_responses_json") @db.Text
-  /// Análisis experto generado por IA (texto largo estructurado)
   expertAnalysis    String?  @map("expert_analysis") @db.Text
   createdAt         DateTime @default(now()) @map("created_at")
 }
@@ -104,11 +172,11 @@ model CustomScenario {
   prospectType    String   @map("prospect_type")
   personality     String
   context         String   @db.Text
-  objections      String   @db.Text // JSON array
+  objections      String   @db.Text
   constraints     String?  @db.Text
-  difficulty      String   @default("normal") // easy | normal | hard
+  difficulty      String   @default("normal")
   locale          String   @default("es-ES")
-  tone            String   @default("formal") // formal | cercano | directo
+  tone            String   @default("formal")
   generatedPrompt String   @map("generated_prompt") @db.Text
   prepNotes       String?  @map("prep_notes") @db.Text
   createdAt       DateTime @default(now()) @map("created_at")

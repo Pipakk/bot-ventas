@@ -34,8 +34,8 @@ function NoCallsModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div className="rounded-lg bg-slate-800/60 p-3 space-y-1 text-sm text-slate-300">
-          <p>• <span className="text-primary-300 font-medium">Plan Crecimiento</span> — 10 llamadas/día + escenarios custom · 40€/mes</p>
-          <p>• <span className="text-primary-300 font-medium">Plan Pro ilimitado</span> — sin límites + escenarios ilimitados · 60€/mes</p>
+          <p>• <span className="text-primary-300 font-medium">Plan Profesional</span> — simulaciones ilimitadas + equipo de 10 · 40€/mes</p>
+          <p>• <span className="text-primary-300 font-medium">Plan Premium</span> — equipos ilimitados + todo incluido · 60€/mes</p>
         </div>
         <div className="flex gap-3 pt-1">
           <button onClick={() => router.push("/billing")} className="btn-primary flex-1">
@@ -98,7 +98,7 @@ export default function CallPage() {
       .catch(() => {});
   }, [token]);
 
-  const canCreateScenarios = userPlan === "growth" || userPlan === "unlimited";
+  const canCreateScenarios = userPlan === "professional" || userPlan === "premium";
 
   const loadCustomScenarios = useCallback(async () => {
     if (!token || !canCreateScenarios) return;

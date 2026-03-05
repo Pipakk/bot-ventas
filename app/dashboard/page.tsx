@@ -55,11 +55,15 @@ export default function DashboardPage() {
         <StatCard
           label="Plan actual"
           value={
-            usage?.plan === "unlimited"
-              ? "Pro · Ilimitado"
+            usage?.plan === "premium"
+              ? "Premium"
+              : usage?.plan === "professional"
+              ? "Profesional"
+              : usage?.plan === "unlimited"
+              ? "Premium"
               : usage?.plan === "growth"
-              ? "Crecimiento · 10/día"
-              : "Gratuito · 1/semana"
+              ? "Profesional"
+              : "Gratuito"
           }
           helper="Haz clic para cambiar de plan."
           href="/billing"
@@ -67,18 +71,14 @@ export default function DashboardPage() {
         <StatCard
           label="Simulaciones disponibles"
           value={
-            usage?.plan === "unlimited"
-              ? "Sin límite hoy"
-              : usage?.plan === "growth"
-              ? `${usage?.remainingToday ?? 0} restantes hoy`
-              : `${usage?.remainingThisWeek ?? 0} restantes esta semana`
+            usage?.plan === "premium" || usage?.plan === "professional" || usage?.plan === "unlimited"
+              ? "Ilimitadas"
+              : `${usage?.remainingThisWeek ?? 0} restante esta semana`
           }
           helper={
-            usage?.plan === "unlimited"
+            usage?.plan === "premium" || usage?.plan === "professional" || usage?.plan === "unlimited"
               ? "Entrena tanto como quieras."
-              : usage?.plan === "growth"
-              ? "Hasta 10 simulaciones al día."
-              : "Plan gratuito: 1 simulación por semana."
+              : "Plan Gratuito: 1 simulación por semana."
           }
         />
       </div>
@@ -110,6 +110,23 @@ export default function DashboardPage() {
           <span className="text-primary-400 text-sm font-medium">Ver historial →</span>
         </Link>
       </div>
+
+      {/* Acceso a gestión de equipo para planes Profesional y Premium */}
+      {(usage?.plan === "professional" || usage?.plan === "premium" ||
+        usage?.plan === "growth" || usage?.plan === "unlimited") && (
+        <Link
+          href="/dashboard/team"
+          className="card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-slate-600 transition-colors"
+        >
+          <div>
+            <h2 className="text-lg font-semibold text-white mb-1">Mi equipo</h2>
+            <p className="text-slate-400 text-sm max-w-xl">
+              Gestiona los comerciales de tu equipo, sus permisos y revisa las métricas colectivas.
+            </p>
+          </div>
+          <span className="text-primary-400 text-sm font-medium shrink-0">Gestionar equipo →</span>
+        </Link>
+      )}
     </div>
   );
 }
