@@ -84,7 +84,7 @@ export default function HomePage() {
         </div>
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center">
           <div className="space-y-5">
-            <p className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-medium ring-1" style={{ backgroundColor: "var(--surface-2)", color: "var(--text-muted)", ringColor: "var(--border)" }}>
+            <p className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-medium ring-1 ring-slate-700/60" style={{ backgroundColor: "var(--surface-2)", color: "var(--text-muted)" }}>
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Para SDR, BDR y equipos de ventas B2B
             </p>

@@ -240,7 +240,7 @@ export function CallTrainer({
       }, 3200);
       return () => clearTimeout(t);
     })();
-  }, [phase, token, sessionConfig, speak, onExit]);
+  }, [phase, token, sessionConfig, speak, onExit, onLimitReached]);
 
   useEffect(() => {
     if (phase !== "live") return;
