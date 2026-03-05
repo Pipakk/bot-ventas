@@ -3,26 +3,18 @@
 export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
-import { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 function BillingSuccessContent() {
   const search = useSearchParams();
-  const router = useRouter();
-  const { token } = useAuthStore();
-
-  useEffect(() => {
-    if (!token) {
-      router.replace("/login");
-    }
-  }, [token, router]);
+  const { ready } = useRequireAuth();
 
   const sessionId = search.get("session_id");
   void sessionId;
 
-  if (!token) return null;
+  if (!ready) return null;
 
   return (
     <div className="max-w-lg mx-auto space-y-6">

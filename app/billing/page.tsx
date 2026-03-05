@@ -3,9 +3,9 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 const PLANS = [
   {
@@ -52,27 +52,12 @@ const PLANS = [
 ];
 
 export default function BillingPage() {
-  const { token } = useAuthStore();
+  const { token, ready } = useRequireAuth();
   const router = useRouter();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [error, setError] = useState("");
-  const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    // Esperar al siguiente tick para que Zustand hidrate desde localStorage
-    const t = setTimeout(() => {
-      setReady(true);
-    }, 50);
-    return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    if (ready && !token) {
-      router.replace("/login");
-    }
-  }, [ready, token, router]);
-
-  if (!ready || !token) {
+  if (!ready) {
     return null;
   }
 

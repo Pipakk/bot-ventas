@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useAuthStore, useCallConfigStore, type CustomScenarioSummary } from "@/lib/store";
+import { useCallConfigStore, type CustomScenarioSummary } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import { SCENARIOS, getScenarioById, type ScenarioId } from "@/lib/scenarios";
 import { CallTrainer } from "@/components/CallTrainer";
 import { VoiceSelector } from "@/components/VoiceSelector";
@@ -66,7 +67,7 @@ function PlanUpsellBanner({ onUpgrade }: { onUpgrade: () => void }) {
 
 export default function CallPage() {
   const router = useRouter();
-  const token = useAuthStore((s) => s.token);
+  const { token, ready } = useRequireAuth();
   const config = useCallConfigStore();
   const [started, setStarted] = useState(false);
   const [error, setError] = useState("");
@@ -119,11 +120,7 @@ export default function CallPage() {
     loadCustomScenarios();
   }, [loadCustomScenarios]);
 
-  useEffect(() => {
-    if (!token) router.replace("/login");
-  }, [token, router]);
-
-  if (!token) return null;
+  if (!ready) return null;
 
   async function selectCustomScenario(s: CustomScenarioSummary) {
     // Cargar el prompt completo

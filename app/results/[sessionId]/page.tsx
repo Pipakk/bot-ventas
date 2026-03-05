@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useAuthStore, useCallConfigStore } from "@/lib/store";
+import { useCallConfigStore } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 interface ScoreData {
   totalScore: number;
@@ -23,7 +24,7 @@ interface ScoreData {
 export default function ResultPage() {
   const params = useParams();
   const router = useRouter();
-  const token = useAuthStore((s) => s.token);
+  const { token, ready } = useRequireAuth();
   const callConfig = useCallConfigStore();
   const [session, setSession] = useState<{ id: string; durationSeconds: number | null; difficulty: string } | null>(null);
   const [transcript, setTranscript] = useState<{ speaker: string; text: string }[]>([]);
@@ -33,10 +34,7 @@ export default function ResultPage() {
   const [analyzing, setAnalyzing] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
+    if (!token) return;
     const id = params.sessionId as string;
     if (!id) return;
     fetch(`/api/call/score/${id}`, {
@@ -51,9 +49,9 @@ export default function ResultPage() {
       })
       .catch((e) => setError(e instanceof Error ? e.message : "Error"))
       .finally(() => setLoading(false));
-  }, [token, params.sessionId, router]);
+  }, [token, params.sessionId]);
 
-  if (!token) return null;
+  if (!ready) return null;
   if (loading) return <p className="text-slate-400">Preparando tu análisis...</p>;
   if (error) return <p className="text-red-400">No se pudo cargar el análisis. Inténtalo de nuevo.</p>;
   if (!session || !score) return <p className="text-slate-400">No hay datos para esta sesión.</p>;

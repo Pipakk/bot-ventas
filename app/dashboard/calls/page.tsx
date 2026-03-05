@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 interface CallSessionSummary {
   id: string;
@@ -19,16 +18,12 @@ interface CallSessionSummary {
 }
 
 export default function CallsHistoryPage() {
-  const router = useRouter();
-  const token = useAuthStore((s) => s.token);
+  const { token, ready } = useRequireAuth();
   const [sessions, setSessions] = useState<CallSessionSummary[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
+    if (!token) return;
     fetch("/api/call/sessions", { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.json())
       .then((data) => {
@@ -36,9 +31,9 @@ export default function CallsHistoryPage() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [token, router]);
+  }, [token]);
 
-  if (!token) return null;
+  if (!ready) return null;
 
   function formatDate(iso: string) {
     const d = new Date(iso);

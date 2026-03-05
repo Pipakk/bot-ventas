@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/lib/store";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
 
@@ -15,14 +15,11 @@ interface Usage {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { token, user, logout } = useAuthStore();
+  const { token, user, logout, ready } = useRequireAuth();
   const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
+    if (!token) return;
     fetch("/api/usage", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -32,9 +29,9 @@ export default function DashboardPage() {
         setUsage(data);
       })
       .catch(() => {});
-  }, [token, router]);
+  }, [token]);
 
-  if (!token) return null;
+  if (!ready) return null;
 
   return (
     <div className="page-stack">
