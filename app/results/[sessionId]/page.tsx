@@ -40,26 +40,44 @@ export default function ResultPage() {
     fetch(`/api/call/score/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((r) => r.json())
+      .then(async (r) => {
+        // Capturar errores HTTP antes de parsear JSON
+        if (!r.ok) {
+          let msg = `Error ${r.status}`;
+          try {
+            const body = await r.json();
+            if (body?.error) msg = body.error;
+          } catch { /* ignorar si no es JSON */ }
+          throw new Error(msg);
+        }
+        return r.json();
+      })
       .then((data) => {
-        if (data.error) throw new Error(data.error);
         setSession(data.session);
         setTranscript(data.transcript ?? []);
-        setScore(data.score);
+        setScore(data.score ?? null);
       })
-      .catch((e) => setError(e instanceof Error ? e.message : "Error"))
+      .catch((e) => setError(e instanceof Error ? e.message : "Error de conexión"))
       .finally(() => setLoading(false));
   }, [token, params.sessionId]);
 
   if (!ready) return null;
   if (loading) return <p className="text-slate-400">Preparando tu análisis...</p>;
-  if (error) return <p className="text-red-400">No se pudo cargar el análisis. Inténtalo de nuevo.</p>;
+  if (error) return (
+    <div className="card p-6 space-y-2">
+      <p className="text-red-400 font-medium">No se pudo cargar el informe</p>
+      <p className="text-slate-400 text-sm">{error}</p>
+      <button onClick={() => window.location.reload()} className="btn-secondary text-sm mt-2">
+        Reintentar
+      </button>
+    </div>
+  );
   if (!session || !score) return <p className="text-slate-400">No hay datos para esta sesión.</p>;
 
   const alreadyAnalyzed = !!score.expertAnalysis;
 
-  const suggestions: string[] = score.suggestionsJson ? JSON.parse(score.suggestionsJson) : [];
-  const weakResponses: string[] = score.weakResponsesJson ? JSON.parse(score.weakResponsesJson) : [];
+  const suggestions: string[] = (() => { try { return score.suggestionsJson ? JSON.parse(score.suggestionsJson) : []; } catch { return []; } })();
+  const weakResponses: string[] = (() => { try { return score.weakResponsesJson ? JSON.parse(score.weakResponsesJson) : []; } catch { return []; } })();
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
