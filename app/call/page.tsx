@@ -77,7 +77,7 @@ export default function CallPage() {
   // Escenarios custom del usuario
   const [customScenarios, setCustomScenarios] = useState<CustomScenarioSummary[]>([]);
   const [loadingCustom, setLoadingCustom] = useState(false);
-  const [userPlan, setUserPlan] = useState<"free" | "growth" | "unlimited">("free");
+  const [userPlan, setUserPlan] = useState<"free" | "growth" | "unlimited" | "professional" | "premium">("free");
 
   // Detectar plan del usuario vía usage endpoint
   useEffect(() => {
