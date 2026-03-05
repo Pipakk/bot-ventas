@@ -292,7 +292,7 @@ html.light .input-base:focus {
 
 /* ─── STICKY CTA MOBILE ──────────────────────────────────────── */
 .sticky-cta-mobile {
-  @apply fixed bottom-0 left-0 right-0 z-30 px-4 pb-safe;
+  @apply fixed bottom-0 left-0 right-0 z-30 px-4;
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
   background: linear-gradient(to top, var(--bg) 70%, transparent);
   pointer-events: none;
