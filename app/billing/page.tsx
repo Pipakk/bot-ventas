@@ -16,9 +16,10 @@ const PLANS = [
     description: "Ideal para probar el entrenador sin compromiso.",
     features: [
       "1 llamada IA a la semana",
-      "Acceso a todos los escenarios",
+      "Acceso a todos los escenarios predefinidos",
       "Scoring básico por llamada",
     ],
+    notIncluded: ["Escenarios personalizados"],
   },
   {
     id: "growth",
@@ -30,7 +31,9 @@ const PLANS = [
       "Hasta 10 llamadas IA al día",
       "Escenarios completos y notas del prospecto",
       "Informe experto de cada llamada",
+      "Crear hasta 10 escenarios personalizados",
     ],
+    notIncluded: [],
   },
   {
     id: "unlimited",
@@ -42,7 +45,9 @@ const PLANS = [
       "Llamadas IA ilimitadas al día",
       "Todos los escenarios y futuras mejoras",
       "Informes expertos y scoring avanzado",
+      "Escenarios personalizados ilimitados",
     ],
+    notIncluded: [],
   },
 ];
 
@@ -134,9 +139,19 @@ export default function BillingPage() {
               <p className="text-xs text-slate-400 mt-1">{plan.description}</p>
               <ul className="mt-3 space-y-1 text-xs text-slate-300">
                 {plan.features.map((f: string) => (
-                  <li key={f} className="flex items-start gap-1">
-                    <span className="mt-[2px] h-1.5 w-1.5 rounded-full bg-primary-400" />
+                  <li key={f} className="flex items-start gap-1.5">
+                    <svg className="mt-[2px] h-3.5 w-3.5 shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
                     <span>{f}</span>
+                  </li>
+                ))}
+                {plan.notIncluded?.map((f: string) => (
+                  <li key={f} className="flex items-start gap-1.5 opacity-40">
+                    <svg className="mt-[2px] h-3.5 w-3.5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span className="line-through text-slate-500">{f}</span>
                   </li>
                 ))}
               </ul>

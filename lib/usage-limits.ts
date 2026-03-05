@@ -102,3 +102,32 @@ export async function canUseAiMode(userId: string): Promise<boolean> {
   const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
   return !!user;
 }
+
+/** Límites de escenarios personalizados por plan */
+export const SCENARIO_LIMITS: Record<UserPlan, number | null> = {
+  free: 0,
+  growth: 10,
+  unlimited: null, // ilimitado
+};
+
+/** Devuelve true si el usuario puede crear escenarios personalizados */
+export async function canCreateScenarios(userId: string): Promise<{
+  allowed: boolean;
+  plan: UserPlan;
+  limit: number | null;
+  current: number;
+}> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true, plan: true, _count: { select: { customScenarios: true } } },
+  });
+  if (!user) return { allowed: false, plan: "free", limit: 0, current: 0 };
+
+  const plan = getUserPlan(user.role, user.plan as UserPlan | null);
+  const limit = SCENARIO_LIMITS[plan];
+  const current = user._count.customScenarios;
+
+  if (limit === 0) return { allowed: false, plan, limit, current };
+  if (limit === null) return { allowed: true, plan, limit, current };
+  return { allowed: current < limit, plan, limit, current };
+}

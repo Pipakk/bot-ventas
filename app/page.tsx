@@ -203,6 +203,7 @@ export default function HomePage() {
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
               <li>· Todos los escenarios y perfiles</li>
               <li>· Puntuación básica por llamada</li>
+              <li className="opacity-40 line-through text-slate-500">· Escenarios personalizados</li>
             </ul>
             <Link
               href="/billing?plan=free"
@@ -218,6 +219,7 @@ export default function HomePage() {
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
               <li>· Contexto completo del prospecto</li>
               <li>· Informe experto tras cada simulación</li>
+              <li>· Crear hasta 10 escenarios personalizados</li>
             </ul>
             <button
               type="button"
@@ -234,6 +236,7 @@ export default function HomePage() {
             <p className="text-xs text-slate-400">Simulaciones ilimitadas cada día</p>
             <ul className="mt-3 space-y-1 text-xs text-slate-300">
               <li>· Entrena tanto como quieras</li>
+              <li>· Escenarios personalizados ilimitados</li>
               <li>· Todas las mejoras futuras incluidas</li>
             </ul>
             <button

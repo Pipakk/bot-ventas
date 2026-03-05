@@ -23,9 +23,10 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  callSessions       CallSession[]
-  userSettings       UserSettings?
+  callSessions        CallSession[]
+  userSettings        UserSettings?
   passwordResetTokens PasswordResetToken[]
+  customScenarios     CustomScenario[]
 }
 
 model UserSettings {
@@ -89,6 +90,31 @@ model ScoreResult {
   /// Análisis experto generado por IA (texto largo estructurado)
   expertAnalysis    String?  @map("expert_analysis") @db.Text
   createdAt         DateTime @default(now()) @map("created_at")
+}
+
+model CustomScenario {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  prospectName    String   @map("prospect_name")
+  industry        String
+  product         String
+  callGoal        String   @map("call_goal")
+  prospectType    String   @map("prospect_type")
+  personality     String
+  context         String   @db.Text
+  objections      String   @db.Text // JSON array
+  constraints     String?  @db.Text
+  difficulty      String   @default("normal") // easy | normal | hard
+  locale          String   @default("es-ES")
+  tone            String   @default("formal") // formal | cercano | directo
+  generatedPrompt String   @map("generated_prompt") @db.Text
+  prepNotes       String?  @map("prep_notes") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("custom_scenarios")
 }
 
 model PasswordResetToken {
