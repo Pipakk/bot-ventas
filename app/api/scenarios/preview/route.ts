@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const payload = verifyToken(token);
   if (!payload) return NextResponse.json({ error: "Token inválido" }, { status: 401 });
 
-  const permission = await canCreateScenarios(payload.id);
+  const permission = await canCreateScenarios(payload.userId);
   if (!permission.allowed) {
     return NextResponse.json(
       {

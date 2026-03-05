@@ -23,7 +23,7 @@ export async function GET(
   const scenario = await prisma.customScenario.findUnique({
     where: { id: params.id },
   });
-  if (!scenario || scenario.userId !== payload.id) {
+  if (!scenario || scenario.userId !== payload.userId) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
 
@@ -44,7 +44,7 @@ export async function DELETE(
     where: { id: params.id },
     select: { userId: true },
   });
-  if (!scenario || scenario.userId !== payload.id) {
+  if (!scenario || scenario.userId !== payload.userId) {
     return NextResponse.json({ error: "No encontrado" }, { status: 404 });
   }
 

@@ -19,8 +19,8 @@ export async function GET(req: Request) {
   if (!payload) return NextResponse.json({ error: "Token inválido" }, { status: 401 });
 
   const [usage, scenarioPerm] = await Promise.all([
-    getPlanUsage(payload.id),
-    canCreateScenarios(payload.id),
+    getPlanUsage(payload.userId),
+    canCreateScenarios(payload.userId),
   ]);
 
   return NextResponse.json({

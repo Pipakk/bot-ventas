@@ -23,7 +23,7 @@ export async function GET(req: Request) {
   if (!payload) return NextResponse.json({ error: "Token inválido" }, { status: 401 });
 
   const scenarios = await prisma.customScenario.findMany({
-    where: { userId: payload.id },
+    where: { userId: payload.userId },
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
   if (!payload) return NextResponse.json({ error: "Token inválido" }, { status: 401 });
 
   // Comprobar permiso de plan
-  const permission = await canCreateScenarios(payload.id);
+  const permission = await canCreateScenarios(payload.userId);
   if (!permission.allowed) {
     return NextResponse.json(
       {
@@ -125,7 +125,7 @@ export async function POST(req: Request) {
 
   const scenario = await prisma.customScenario.create({
     data: {
-      userId: payload.id,
+      userId: payload.userId,
       name: sanitized.name,
       prospectName: sanitized.prospectName,
       industry: sanitized.industry,
