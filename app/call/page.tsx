@@ -201,7 +201,7 @@ export default function CallPage() {
             aiProvider: config.aiProvider,
             voiceUri: config.selectedVoiceUri || undefined,
           }}
-          token={token}
+          token={token!}
           onExit={() => setStarted(false)}
           onLimitReached={() => setShowNoCallsModal(true)}
         />
