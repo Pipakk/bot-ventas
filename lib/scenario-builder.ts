@@ -108,7 +108,9 @@ function buildOpeningLine(personality: string, prospectName: string): string {
 function buildObjectionsSection(objections: string[]): string {
   if (!objections.length) return "";
   const list = objections.map((o) => `- "${o}"`).join("\n");
-  return `OBJECIONES ESPERADAS (úsalas en el momento natural, no todas a la vez):\n${list}`;
+  return `OBJECIONES ESPERADAS (úsalas en el momento natural, no todas a la vez):
+${list}
+- Puedes improvisar objeciones adicionales que encajen con tu contexto y personalidad, siempre que sean realistas y coherentes con la situación.`;
 }
 
 function buildConstraintsSection(constraints?: string): string {

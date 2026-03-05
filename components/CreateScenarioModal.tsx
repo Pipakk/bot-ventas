@@ -120,7 +120,7 @@ const EMPTY: WizardData = {
   personality: "Skeptical",
   difficulty: "normal",
   context: "",
-  objections: ["", "", ""],
+  objections: ["No tenemos presupuesto para esto ahora mismo.", "No creo que lo necesitemos realmente.", "Ahora mismo no es el momento, estamos con otros proyectos."],
   constraints: "",
   locale: "es-ES",
   tone: "formal",
@@ -401,7 +401,7 @@ function Step3({
       <div>
         <Label required>Objeciones típicas esperadas</Label>
         <p className="text-xs mb-2" style={{ color: "var(--text-muted)" }}>
-          Entre 1 y 8. Estas son las objeciones que el prospecto lanzará durante la simulación.
+          Te damos 3 de base, edítalas o añade más (hasta 8). La IA también puede improvisar objeciones adicionales que encajen con el contexto.
         </p>
         <div className="space-y-2">
           {data.objections.map((obj, i) => (
@@ -410,7 +410,7 @@ function Step3({
                 type="text"
                 value={obj}
                 onChange={(e) => setObjection(i, e.target.value)}
-                placeholder={`Objeción ${i + 1}… (ej: "Ya tenemos proveedor")`}
+                placeholder={`Objeción ${i + 1}… (edita o añade la tuya)`}
                 className="input-base flex-1 text-sm"
                 maxLength={200}
               />
