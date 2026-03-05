@@ -32,8 +32,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
+      root.classList.remove("light");
     } else {
       root.classList.remove("dark");
+      root.classList.add("light");
     }
     window.localStorage.setItem("coldcall-theme", theme);
   }, [theme]);

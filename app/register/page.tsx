@@ -45,6 +45,8 @@ export default function RegisterPage() {
         <input
           type="email"
           placeholder="Tu email"
+          autoComplete="email"
+          inputMode="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
@@ -52,7 +54,8 @@ export default function RegisterPage() {
         />
         <input
           type="password"
-          placeholder="Contraseña (mín. 6)"
+          placeholder="Contraseña (mín. 6 caracteres)"
+          autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-slate-100 placeholder-slate-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"

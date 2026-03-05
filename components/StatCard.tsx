@@ -7,17 +7,24 @@ interface StatCardProps {
 
 export function StatCard({ label, value, helper, href }: StatCardProps) {
   return (
-    <div className="card p-4 flex flex-col gap-1">
-      <p className="text-muted">{label}</p>
+    <div className="card p-4 sm:p-5 flex flex-col gap-1">
+      <p className="text-xs font-medium uppercase tracking-[0.12em]" style={{ color: "var(--text-muted)" }}>
+        {label}
+      </p>
       {href ? (
-        <a href={href} className="text-xl font-semibold text-primary-300 hover:underline">
+        <a
+          href={href}
+          className="text-xl font-semibold transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:underline"
+          style={{ color: "var(--primary)" }}
+        >
           {value}
         </a>
       ) : (
-        <p className="text-xl font-semibold text-slate-50">{value}</p>
+        <p className="text-xl font-semibold" style={{ color: "var(--text)" }}>{value}</p>
       )}
-      {helper && <p className="text-xs text-slate-500">{helper}</p>}
+      {helper && (
+        <p className="text-xs" style={{ color: "var(--text-muted)" }}>{helper}</p>
+      )}
     </div>
   );
 }
-

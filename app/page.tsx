@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
@@ -8,11 +8,38 @@ import { Avatar } from "@/components/Avatar";
 
 type PaidPlanId = "growth" | "unlimited";
 
+// Scroll reveal hook
+function useReveal() {
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add("visible"); obs.unobserve(el); } },
+      { threshold: 0.12 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return ref;
+}
+
 export default function HomePage() {
   const token = useAuthStore((s) => s.token);
   const router = useRouter();
   const [loadingPlan, setLoadingPlan] = useState<PaidPlanId | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
+  const [showStickyCta, setShowStickyCta] = useState(false);
+  const heroRef = useReveal();
+  const featRef = useReveal() as React.RefObject<HTMLElement>;
+  const pricingRef = useReveal() as React.RefObject<HTMLElement>;
+
+  // Show sticky CTA after hero scrolls out of view
+  useEffect(() => {
+    const onScroll = () => setShowStickyCta(window.scrollY > 300);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   async function handlePaidPlan(planId: PaidPlanId) {
     setCheckoutError("");
@@ -45,34 +72,38 @@ export default function HomePage() {
   }
 
   return (
-    <div className="space-y-12 pb-10">
+    <div className="space-y-10 sm:space-y-12 pb-24 sm:pb-10">
       {/* HERO */}
-      <section className="relative overflow-hidden rounded-3xl border border-slate-800/70 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-950 px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-40 blur-3xl">
-          <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.4),transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.4),transparent_55%)]" />
+      <section
+        ref={heroRef as React.RefObject<HTMLElement>}
+        className="reveal relative overflow-hidden rounded-2xl sm:rounded-3xl border px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12"
+        style={{ borderColor: "var(--border)", background: "linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%)" }}
+      >
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-30 blur-3xl" aria-hidden="true">
+          <div className="h-full w-full bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(59,130,246,0.35),transparent_55%)]" />
         </div>
-        <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center">
-          <div className="space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium text-slate-300 ring-1 ring-slate-700/70">
+        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center">
+          <div className="space-y-5">
+            <p className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-medium ring-1" style={{ backgroundColor: "var(--surface-2)", color: "var(--text-muted)", ringColor: "var(--border)" }}>
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Para SDR, BDR y equipos de ventas B2B
             </p>
             <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-white">
+              <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight leading-tight">
                 Entrena tus cold calls{" "}
-                <span className="bg-gradient-to-r from-sky-300 to-primary-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-sky-300 to-blue-400 bg-clip-text text-transparent">
                   y domina cualquier objeción.
                 </span>
               </h1>
-              <p className="max-w-xl text-sm sm:text-base text-slate-300">
+              <p className="max-w-xl text-sm sm:text-base" style={{ color: "var(--text-muted)" }}>
                 Practica con prospectos que reaccionan como clientes reales. Mejora tu pitch,
                 gestiona objeciones y aumenta tus reuniones antes de llamar a clientes de verdad.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link
                 href={token ? "/call" : "/register"}
-                className="btn-primary w-full sm:w-auto justify-center"
+                className="btn-primary w-full sm:w-auto justify-center text-base"
               >
                 {token ? "Entrenar ahora" : "Entrenar mi primera cold call"}
               </Link>
@@ -85,11 +116,11 @@ export default function HomePage() {
                 </Link>
               )}
             </div>
-            <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]" style={{ color: "var(--text-muted)" }}>
               <span>✔ Objeciones reales</span>
-              <span className="hidden sm:inline text-slate-600">•</span>
+              <span className="hidden sm:inline opacity-30">•</span>
               <span className="hidden sm:inline">✔ Perfiles CEO, dueño y técnico</span>
-              <span className="hidden lg:inline text-slate-600">•</span>
+              <span className="hidden lg:inline opacity-30">•</span>
               <span className="hidden lg:inline">✔ Feedback experto post-llamada</span>
             </div>
           </div>
@@ -132,41 +163,24 @@ export default function HomePage() {
       </section>
 
       {/* FEATURES / STEPS */}
-      <section className="grid gap-4 md:grid-cols-3">
-        <div className="card p-4 space-y-2">
-          <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            1 · Elige tu escenario
-          </p>
-          <p className="text-sm font-semibold text-slate-50">Prospectos que ponen a prueba tu pitch</p>
-          <p className="text-xs text-slate-400">
-            CEO escéptico, dueño impaciente, técnico hostil… Elige el perfil y la dificultad para
-            entrenar donde más te cuesta.
-          </p>
-        </div>
-        <div className="card p-4 space-y-2">
-          <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            2 · Entrena con voz real
-          </p>
-          <p className="text-sm font-semibold text-slate-50">Objeciones en tiempo real, como una llamada de verdad</p>
-          <p className="text-xs text-slate-400">
-            El prospecto responde, interrumpe y cambia de tono según lo que dices. Sin guion fijo,
-            sin trampa.
-          </p>
-        </div>
-        <div className="card p-4 space-y-2">
-          <p className="text-xs font-semibold text-primary-300 uppercase tracking-[0.16em]">
-            3 · Recibe feedback experto
-          </p>
-          <p className="text-sm font-semibold text-slate-50">Sabe exactamente qué mejorar antes de la próxima llamada</p>
-          <p className="text-xs text-slate-400">
-            Puntuación, errores clave, oportunidades perdidas y consejos concretos de un vendedor
-            top 5%.
-          </p>
-        </div>
+      <section ref={featRef} className="reveal grid gap-3 sm:gap-4 md:grid-cols-3">
+        {[
+          { step: "1 · Elige tu escenario", title: "Prospectos que ponen a prueba tu pitch", desc: "CEO escéptico, dueño impaciente, técnico hostil… Elige el perfil y la dificultad para entrenar donde más te cuesta." },
+          { step: "2 · Entrena con voz real", title: "Objeciones en tiempo real", desc: "El prospecto responde, interrumpe y cambia de tono según lo que dices. Sin guion fijo, sin trampa." },
+          { step: "3 · Recibe feedback experto", title: "Sabe exactamente qué mejorar", desc: "Puntuación, errores clave, oportunidades perdidas y consejos de un vendedor top 5%." },
+        ].map((f) => (
+          <div key={f.step} className="card card-interactive p-4 sm:p-5 space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "var(--primary)" }}>
+              {f.step}
+            </p>
+            <p className="text-sm font-semibold" style={{ color: "var(--text)" }}>{f.title}</p>
+            <p className="text-xs leading-relaxed" style={{ color: "var(--text-muted)" }}>{f.desc}</p>
+          </div>
+        ))}
       </section>
 
       {/* PRICING */}
-      <section className="card p-6 sm:p-8 space-y-6">
+      <section ref={pricingRef} className="reveal card p-5 sm:p-8 space-y-6">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-white">Empieza gratis. Escala cuando lo necesites.</h2>
@@ -233,6 +247,19 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* STICKY CTA — mobile only, visible after scroll */}
+      {!token && showStickyCta && (
+        <div className="sticky-cta-mobile sm:hidden">
+          <Link
+            href="/register"
+            className="btn-primary w-full justify-center text-sm"
+            style={{ minHeight: "52px" }}
+          >
+            Entrenar mi primera cold call →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

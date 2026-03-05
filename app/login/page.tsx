@@ -51,10 +51,12 @@ function LoginForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Tu email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="input-base"
+            autoComplete="email"
+            inputMode="email"
             required
           />
           <input
@@ -63,6 +65,7 @@ function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="input-base"
+            autoComplete="current-password"
             required
           />
           {error && <p className="text-sm text-red-400">{error}</p>}
