@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { StatCard } from "@/components/StatCard";
 
 interface Usage {
-  plan: "free" | "growth" | "unlimited";
+  plan: "free" | "growth" | "unlimited" | "professional" | "premium";
   remainingToday: number | null;
   remainingThisWeek: number | null;
 }
